@@ -785,32 +785,46 @@ main{padding-bottom:150px}
 
 <div class="lk" id="lk" role="region" aria-label="Lektor">
   <button type="button" class="main" id="lkPlay" aria-label="Odtwarzaj"></button>
-  <div class="info"><b>Lektor</b><span id="lkNow">Odsłuchaj wykład</span></div>
+  <div class="info"><button type="button" class="pick" id="lkPick" aria-haspopup="listbox" aria-expanded="false" aria-label="Przejdź do części"><span id="lkPickT">Wstęp</span><svg viewBox="0 0 16 16"><path d="M3 6l5 5 5-5z"/></svg></button><span id="lkNow">Odsłuchaj wykład</span></div>
   <button type="button" class="skip" id="lkPrev" aria-label="Cofnij o 15 sekund" title="Cofnij o 15 sekund"></button>
   <button type="button" class="skip" id="lkNext" aria-label="Do przodu o 15 sekund" title="Do przodu o 15 sekund"></button>
   <button type="button" id="lkStop" aria-label="Zatrzymaj"></button>
   <button type="button" id="lkSet" aria-label="Ustawienia lektora" aria-expanded="false"></button>
   <div class="seek">
-    <select id="lkSel" aria-label="Przejdź do części"></select>
     <time id="lkTc">0:00</time>
     <input type="range" id="lkSeek" min="0" max="100" step="1" value="0" disabled aria-label="Przewiń do dowolnego miejsca w czytanej części">
     <time id="lkTd">0:00</time>
   </div>
+  <div class="plist" id="lkList" role="listbox" aria-label="Części wykładu" hidden></div>
   <div class="lk-pop" id="lkPop" hidden>
     <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="1.5" step="0.05" value="1"></label>
         <label class="chk"><input type="checkbox" id="lkAuto" checked> Czytaj kolejne części automatycznie</label>
   </div>
 </div>
 <style>
-/* przewijanie: pasek postępu, wybór części, przyciski -15 s / +15 s */
-.lk{flex-wrap:wrap}
-.lk button.skip{width:auto;min-width:48px;padding:0 8px;font-family:var(--display);font-size:13px;font-weight:600;white-space:nowrap}
+/* odtwarzacz: zwarta karta przy prawej krawędzi, przewijanie, wybór części */
+.lk{left:auto;right:16px;bottom:16px;width:380px;max-width:calc(100vw - 24px);flex-wrap:wrap;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 32px rgba(0,50,40,.22)}
+.lk button{border-radius:50%;width:34px;height:34px}
+.lk button.main{width:42px;height:42px}
+.lk button.skip{width:auto;min-width:44px;padding:0 8px;border-radius:999px;font-family:var(--display);font-size:13px;font-weight:600;white-space:nowrap}
+.lk .info{flex:1 1 0;width:auto;min-width:0;display:grid}
+.lk .info span{font-size:12px;padding-left:2px}
+.lk button.pick{display:flex;justify-content:flex-start;align-items:center;gap:6px;width:100%;height:auto;border:0;border-radius:10px;background:transparent;padding:2px 4px;margin-left:-4px;font-family:var(--display);font-size:14px;font-weight:600;text-align:left}
+.lk button.pick:hover{background:var(--leaf-wash)}
+.lk button.pick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:14px;color:var(--ink);padding:0}
+.lk button.pick svg{width:11px;height:11px;flex:none;opacity:.65}
+.lk .plist{position:absolute;left:0;right:0;bottom:calc(100% + 8px);z-index:3;max-height:min(60vh,380px);overflow:auto;display:grid;gap:2px;padding:6px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 32px rgba(0,50,40,.22)}
+.lk .plist[hidden]{display:none}
+.lk .plist button{display:flex;justify-content:flex-start;width:100%;height:auto;border:0;border-radius:12px;background:transparent;padding:10px 14px;text-align:left;font-family:var(--body);font-size:15px}
+.lk .plist button:hover{background:var(--leaf-wash)}
+.lk .plist button[aria-selected="true"]{background:var(--leaf-wash);color:var(--accent-text);font-weight:600}
+.lk .lk-pop{border:1px solid var(--line);border-radius:18px}
 .lk .seek{flex:1 0 100%;order:20;display:flex;align-items:center;gap:8px;min-width:0}
-.lk .seek select{font:inherit;font-size:13.5px;padding:6px 8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);flex:0 1 auto;max-width:44%;min-width:0}
 .lk .seek input[type=range]{flex:1 1 auto;min-width:0;width:100%;accent-color:var(--brand);margin:0;cursor:pointer}
 .lk .seek input[type=range]:disabled{cursor:default;opacity:.5}
-.lk .seek time{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
-main{padding-bottom:150px}
+.lk .seek time{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+@media (max-width:480px){.lk{left:8px;right:8px;bottom:8px;width:auto;max-width:none}}
+main{padding-bottom:130px}
 </style>
 <audio id="lkAudio" preload="none"></audio>
 <script>
@@ -1169,10 +1183,10 @@ function sec(i){return document.getElementById(PARTS[i].id)}
 function mark(i){if(cur)cur.classList.remove('reading');cur=i==null?null:sec(i);if(!cur)return;cur.classList.add('reading');}
 function ui(){var pl=!A.paused&&!A.ended;
   $('#lkPlay').innerHTML=pl?IC.pause:IC.play;$('#lkPlay').setAttribute('aria-label',pl?'Wstrzymaj':'Odtwarzaj');
-  $('#lkNow').textContent=pl?'Czyta: '+PARTS[ix].title:(A.src&&A.currentTime>0?'Wstrzymano: '+PARTS[ix].title:'Odsłuchaj wykład')}
-function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value;if(SEL)SEL.value=ix}
+  $('#lkNow').textContent=pl?'Czyta':(A.src&&A.currentTime>0?'Wstrzymano':'Odsłuchaj wykład')}
+function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value;pickSync()}
 function playPart(i,fromEnd,noPlay){load(i);mark(ix);pend=fromEnd==null?null:fromEnd;if(!noPlay)A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui();seekUI()}
-function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;if(SEL)SEL.value=0;mark(null);ui();seekUI()}
+function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;pickSync();mark(null);ui();seekUI()}
 
 A.addEventListener('play',ui);A.addEventListener('pause',ui);
 A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
@@ -1194,9 +1208,18 @@ PARTS.forEach(function(p,i){var s=document.getElementById(p.id);if(!s)return;var
   b.addEventListener('click',function(){playPart(i)});h.insertAdjacentElement('afterend',b)});
 
 /* ===== przewijanie: pasek, wybór części, -15 s / +15 s ===== */
-var SEL=$('#lkSel'),SK=$('#lkSeek'),TC=$('#lkTc'),TD=$('#lkTd'),drag=false,pend=null;
-PARTS.forEach(function(p,i){var o=document.createElement('option');o.value=i;o.textContent=p.title;SEL.appendChild(o)});
-SEL.value=ix;
+var SK=$('#lkSeek'),TC=$('#lkTc'),TD=$('#lkTd'),drag=false,pend=null;
+var PB=$('#lkPick'),LST=$('#lkList');
+function pickSync(){if(!LST)return;$('#lkPickT').textContent=PARTS[ix].title;[].forEach.call(LST.children,function(b,i){b.setAttribute('aria-selected',String(i===ix))})}
+function closeList(){LST.hidden=true;PB.setAttribute('aria-expanded','false')}
+PARTS.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','option');b.textContent=p.title;
+  b.addEventListener('click',function(){closeList();playPart(i)});LST.appendChild(b)});
+PB.addEventListener('click',function(e){e.stopPropagation();var open=LST.hidden;LST.hidden=!open;PB.setAttribute('aria-expanded',String(open));
+  if(open){$('#lkPop').hidden=true;$('#lkSet').setAttribute('aria-expanded','false')}});
+$('#lkSet').addEventListener('click',closeList);
+document.addEventListener('click',function(e){if(!LST.hidden&&!LST.contains(e.target))closeList()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeList()});
+pickSync();
 function fmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var m=Math.floor(t/60),s=t%60;return m+':'+(s<10?'0':'')+s}
 function seekUI(){var d=A.duration,ok=!!A.getAttribute('src')&&isFinite(d)&&d>0;SK.disabled=!ok;
   if(ok){SK.max=Math.floor(d);if(!drag)SK.value=A.currentTime;TD.textContent=fmt(d)}else{SK.max=100;SK.value=0;TD.textContent='0:00'}
@@ -1211,7 +1234,6 @@ A.addEventListener('loadedmetadata',function(){if(pend!=null){A.currentTime=Math
 SK.addEventListener('pointerdown',function(){drag=true});
 ['pointerup','pointercancel','blur'].forEach(function(ev){SK.addEventListener(ev,function(){drag=false;seekUI()})});
 SK.addEventListener('input',function(){TC.textContent=fmt(+SK.value);if(A.getAttribute('src'))A.currentTime=+SK.value});
-SEL.addEventListener('change',function(){playPart(+SEL.value)});
 ui();seekUI();
 })();
 </script>
