@@ -1,0 +1,1 @@
+# wyklad.mikroekonomia1
