@@ -1178,6 +1178,39 @@ PARTS.forEach(function(p,i){var s=document.getElementById(p.id);if(!s)return;var
 ui();
 })();
 </script>
+<style>
+  /* wyłącz podświetlanie sekcji podczas odtwarzania lektora */
+  section.reading,
+  section.reading * {
+    background: inherit !important;
+    box-shadow: none !important;
+  }
+</style>
 
+<script>
+  (() => {
+    const disableReadingHighlight = () => {
+      document.querySelectorAll('section.reading').forEach(el => {
+        el.classList.remove('reading');
+      });
+      document.querySelectorAll('[data-reading]').forEach(el => {
+        el.removeAttribute('data-reading');
+      });
+    };
+
+    const observer = new MutationObserver(() => {
+      disableReadingHighlight();
+    });
+
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    disableReadingHighlight();
+  })();
+</script>
 
 </body></html>
