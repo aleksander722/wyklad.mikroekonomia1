@@ -786,15 +786,32 @@ main{padding-bottom:150px}
 <div class="lk" id="lk" role="region" aria-label="Lektor">
   <button type="button" class="main" id="lkPlay" aria-label="Odtwarzaj"></button>
   <div class="info"><b>Lektor</b><span id="lkNow">Odsłuchaj wykład</span></div>
-  <button type="button" id="lkPrev" aria-label="Poprzednia część"></button>
-  <button type="button" id="lkNext" aria-label="Następna część"></button>
+  <button type="button" class="skip" id="lkPrev" aria-label="Cofnij o 15 sekund" title="Cofnij o 15 sekund"></button>
+  <button type="button" class="skip" id="lkNext" aria-label="Do przodu o 15 sekund" title="Do przodu o 15 sekund"></button>
   <button type="button" id="lkStop" aria-label="Zatrzymaj"></button>
   <button type="button" id="lkSet" aria-label="Ustawienia lektora" aria-expanded="false"></button>
+  <div class="seek">
+    <select id="lkSel" aria-label="Przejdź do części"></select>
+    <time id="lkTc">0:00</time>
+    <input type="range" id="lkSeek" min="0" max="100" step="1" value="0" disabled aria-label="Przewiń do dowolnego miejsca w czytanej części">
+    <time id="lkTd">0:00</time>
+  </div>
   <div class="lk-pop" id="lkPop" hidden>
     <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="1.5" step="0.05" value="1"></label>
         <label class="chk"><input type="checkbox" id="lkAuto" checked> Czytaj kolejne części automatycznie</label>
   </div>
 </div>
+<style>
+/* przewijanie: pasek postępu, wybór części, przyciski -15 s / +15 s */
+.lk{flex-wrap:wrap}
+.lk button.skip{width:auto;min-width:48px;padding:0 8px;font-family:var(--display);font-size:13px;font-weight:600;white-space:nowrap}
+.lk .seek{flex:1 0 100%;order:20;display:flex;align-items:center;gap:8px;min-width:0}
+.lk .seek select{font:inherit;font-size:13.5px;padding:6px 8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);flex:0 1 auto;max-width:44%;min-width:0}
+.lk .seek input[type=range]{flex:1 1 auto;min-width:0;width:100%;accent-color:var(--brand);margin:0;cursor:pointer}
+.lk .seek input[type=range]:disabled{cursor:default;opacity:.5}
+.lk .seek time{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+main{padding-bottom:150px}
+</style>
 <audio id="lkAudio" preload="none"></audio>
 <script>
 (function(){
@@ -1146,16 +1163,16 @@ var $=function(s){return document.querySelector(s)};
 var A=$('#lkAudio'),ix=0,cur=null;
 var IC={play:'<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>',pause:'<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>',prev:'<svg viewBox="0 0 16 16"><path d="M2 2h2v12H2zM14 2v12L5 8z"/></svg>',next:'<svg viewBox="0 0 16 16"><path d="M12 2h2v12h-2zM2 2l9 6-9 6z"/></svg>',stop:'<svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z"/></svg>',gear:'<svg viewBox="0 0 16 16"><path d="M7 1h2l.4 2 1.5.7 1.7-1.2 1.4 1.4-1.2 1.7.7 1.5 2 .4v2l-2 .4-.7 1.5 1.2 1.7-1.4 1.4-1.7-1.2-1.5.7L9 15H7l-.4-2-1.5-.7-1.7 1.2-1.4-1.4 1.2-1.7L2.5 9 1 9V7l2-.4.7-1.5-1.2-1.7 1.4-1.4 1.7 1.2 1.5-.7zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/></svg>'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-$('#lkPlay').innerHTML=IC.play;$('#lkPrev').innerHTML=IC.prev;$('#lkNext').innerHTML=IC.next;$('#lkStop').innerHTML=IC.stop;$('#lkSet').innerHTML=IC.gear;
+$('#lkPlay').innerHTML=IC.play;$('#lkPrev').textContent='−15 s';$('#lkNext').textContent='+15 s';$('#lkStop').innerHTML=IC.stop;$('#lkSet').innerHTML=IC.gear;
 
 function sec(i){return document.getElementById(PARTS[i].id)}
 function mark(i){if(cur)cur.classList.remove('reading');cur=i==null?null:sec(i);if(!cur)return;cur.classList.add('reading');}
 function ui(){var pl=!A.paused&&!A.ended;
   $('#lkPlay').innerHTML=pl?IC.pause:IC.play;$('#lkPlay').setAttribute('aria-label',pl?'Wstrzymaj':'Odtwarzaj');
   $('#lkNow').textContent=pl?'Czyta: '+PARTS[ix].title:(A.src&&A.currentTime>0?'Wstrzymano: '+PARTS[ix].title:'Odsłuchaj wykład')}
-function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value}
-function playPart(i){load(i);mark(ix);A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui()}
-function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;mark(null);ui()}
+function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value;if(SEL)SEL.value=ix}
+function playPart(i,fromEnd,noPlay){load(i);mark(ix);pend=fromEnd==null?null:fromEnd;if(!noPlay)A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui();seekUI()}
+function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;if(SEL)SEL.value=0;mark(null);ui();seekUI()}
 
 A.addEventListener('play',ui);A.addEventListener('pause',ui);
 A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
@@ -1163,8 +1180,8 @@ A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1
 
 $('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
 $('#lkStop').addEventListener('click',stopAll);
-$('#lkPrev').addEventListener('click',function(){playPart(ix-1)});
-$('#lkNext').addEventListener('click',function(){playPart(ix+1)});
+$('#lkPrev').addEventListener('click',function(){skip(-15)});
+$('#lkNext').addEventListener('click',function(){skip(15)});
 $('#lkSet').addEventListener('click',function(){var p=$('#lkPop');p.hidden=!p.hidden;this.setAttribute('aria-expanded',String(!p.hidden))});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!A.paused)A.pause()});
 var rs=store('lk-rate');if(rs)$('#lkRate').value=rs;
@@ -1175,7 +1192,27 @@ $('#lkRate').addEventListener('input',rt);rt();
 PARTS.forEach(function(p,i){var s=document.getElementById(p.id);if(!s)return;var h=s.querySelector('h2');if(!h)return;
   var b=document.createElement('button');b.type='button';b.className='lk-sec';b.innerHTML=IC.play+'Odsłuchaj tę część';
   b.addEventListener('click',function(){playPart(i)});h.insertAdjacentElement('afterend',b)});
-ui();
+
+/* ===== przewijanie: pasek, wybór części, -15 s / +15 s ===== */
+var SEL=$('#lkSel'),SK=$('#lkSeek'),TC=$('#lkTc'),TD=$('#lkTd'),drag=false,pend=null;
+PARTS.forEach(function(p,i){var o=document.createElement('option');o.value=i;o.textContent=p.title;SEL.appendChild(o)});
+SEL.value=ix;
+function fmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var m=Math.floor(t/60),s=t%60;return m+':'+(s<10?'0':'')+s}
+function seekUI(){var d=A.duration,ok=!!A.getAttribute('src')&&isFinite(d)&&d>0;SK.disabled=!ok;
+  if(ok){SK.max=Math.floor(d);if(!drag)SK.value=A.currentTime;TD.textContent=fmt(d)}else{SK.max=100;SK.value=0;TD.textContent='0:00'}
+  TC.textContent=ok?fmt(drag?+SK.value:A.currentTime):'0:00';
+  SK.setAttribute('aria-valuetext',ok?fmt(+SK.value)+' z '+fmt(d):'brak odtwarzania')}
+function skip(d){if(!A.getAttribute('src'))return;var dur=A.duration,t=A.currentTime+d,was=!A.paused;
+  if(t<0){if(ix>0)playPart(ix-1,-t,!was);else A.currentTime=0}
+  else if(isFinite(dur)&&t>=dur){if(ix<PARTS.length-1)playPart(ix+1,null,!was);else A.currentTime=dur}
+  else A.currentTime=t}
+A.addEventListener('loadedmetadata',function(){if(pend!=null){A.currentTime=Math.max(0,A.duration-pend);pend=null}seekUI()});
+['timeupdate','durationchange','emptied','seeked'].forEach(function(ev){A.addEventListener(ev,seekUI)});
+SK.addEventListener('pointerdown',function(){drag=true});
+['pointerup','pointercancel','blur'].forEach(function(ev){SK.addEventListener(ev,function(){drag=false;seekUI()})});
+SK.addEventListener('input',function(){TC.textContent=fmt(+SK.value);if(A.getAttribute('src'))A.currentTime=+SK.value});
+SEL.addEventListener('change',function(){playPart(+SEL.value)});
+ui();seekUI();
 })();
 </script>
 <style>
