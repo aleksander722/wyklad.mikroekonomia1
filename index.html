@@ -45,11 +45,21 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 
 /* nawigacja */
 .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
-.nav-in{max-width:1040px;margin:0 auto;padding-inline:20px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin}
-.nav button{border:0;background:none;padding:12px 10px;font-family:var(--display);font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent}
+.nav-in{max-width:none;margin:0;padding-inline:10px;display:flex;justify-content:flex-start;gap:0;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav button{border:0;background:none;padding:7px 9px;font-family:var(--display);font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent}
 .nav button:hover{color:var(--ink)}
 .nav button.on{color:var(--accent-text);border-bottom-color:var(--leaf)}
 .bar{height:3px;background:var(--leaf);width:0}
+/* komputer: pionowe menu przy lewej krawędzi, treść przesunięta w prawo */
+@media (min-width:900px){
+  body{padding-left:190px}
+  .nav{position:fixed;top:0;left:0;bottom:0;width:190px;overflow-y:auto;border-bottom:0;border-right:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);scrollbar-width:thin}
+  .nav-in{flex-direction:column;align-items:stretch;overflow:visible;padding:14px 0}
+  .nav button{text-align:left;white-space:normal;line-height:1.3;padding:8px 14px 8px 13px;font-size:14px;border-bottom:0;border-left:3px solid transparent}
+  .nav button.on{border-left-color:var(--leaf);background:var(--leaf-wash)}
+  .bar{position:absolute;top:0;right:0;width:3px!important;height:var(--p,0%)}
+}
 
 /* treść */
 main{padding-inline:20px;padding-block:8px 80px}
@@ -845,7 +855,7 @@ var nav=$('#nav'),secs=[].slice.call(document.querySelectorAll('section[data-nav
 secs.forEach(function(s){var b=el('button','',s.getAttribute('data-nav'));b.type='button';
   b.addEventListener('click',function(){s.scrollIntoView({behavior:'smooth',block:'start'})});nav.appendChild(b);nbs.push(b)});
 function onScroll(){var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
-  $('#bar').style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  var pct=(max>0?(h.scrollTop/max*100):0)+'%';$('#bar').style.width=pct;$('#bar').style.setProperty('--p',pct);
   var cur=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<140)cur=i});
   nbs.forEach(function(b,i){b.classList.toggle('on',i===cur)});}
 window.addEventListener('scroll',onScroll,{passive:true});onScroll();
