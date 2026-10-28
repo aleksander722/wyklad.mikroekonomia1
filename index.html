@@ -1183,7 +1183,7 @@ var PARTS=[
   {id:'s9', file:'audio/podsumowanie.mp3', title:'Podsumowanie'}
 ];
 var $=function(s){return document.querySelector(s)};
-var A=$('#lkAudio'),ix=0,cur=null;
+var A=$('#lkAudio'),ix=0,cur=null,advT=null;
 var IC={play:'<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>',pause:'<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>',prev:'<svg viewBox="0 0 16 16"><path d="M2 2h2v12H2zM14 2v12L5 8z"/></svg>',next:'<svg viewBox="0 0 16 16"><path d="M12 2h2v12h-2zM2 2l9 6-9 6z"/></svg>',stop:'<svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z"/></svg>',gear:'<svg viewBox="0 0 16 16"><path d="M7 1h2l.4 2 1.5.7 1.7-1.2 1.4 1.4-1.2 1.7.7 1.5 2 .4v2l-2 .4-.7 1.5 1.2 1.7-1.4 1.4-1.7-1.2-1.5.7L9 15H7l-.4-2-1.5-.7-1.7 1.2-1.4-1.4 1.2-1.7L2.5 9 1 9V7l2-.4.7-1.5-1.2-1.7 1.4-1.4 1.7 1.2 1.5-.7zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/></svg>'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 $('#lkPlay').innerHTML=IC.play;$('#lkPrev').textContent='−15 s';$('#lkNext').textContent='+15 s';$('#lkSet').innerHTML=IC.gear;
@@ -1194,12 +1194,12 @@ function ui(){var pl=!A.paused&&!A.ended;
   $('#lkPlay').innerHTML=pl?IC.pause:IC.play;$('#lkPlay').setAttribute('aria-label',pl?'Wstrzymaj':'Odtwarzaj');
   $('#lkNow').textContent=pl?'Czyta':(A.src&&A.currentTime>0?'Wstrzymano':'Odsłuchaj wykład')}
 function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value;pickSync()}
-function playPart(i,fromEnd,noPlay){load(i);mark(ix);pend=fromEnd==null?null:fromEnd;if(!noPlay)A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui();seekUI()}
-function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;pickSync();mark(null);ui();seekUI()}
+function playPart(i,fromEnd,noPlay){clearTimeout(advT);load(i);mark(ix);pend=fromEnd==null?null:fromEnd;if(!noPlay)A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui();seekUI()}
+function stopAll(){clearTimeout(advT);A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;pickSync();mark(null);ui();seekUI()}
 
-A.addEventListener('play',ui);A.addEventListener('pause',ui);
+A.addEventListener('play',function(){clearTimeout(advT);ui()});A.addEventListener('pause',ui);
 A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
-A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1){playPart(ix+1);var t=sec(ix);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}else{mark(null);ui()}});
+A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1){advT=setTimeout(function(){playPart(ix+1);var t=sec(ix);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})},1000)}else{mark(null);ui()}});
 
 $('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
 $('#lkPrev').addEventListener('click',function(){skip(-15)});
