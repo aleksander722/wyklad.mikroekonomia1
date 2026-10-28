@@ -788,7 +788,6 @@ main{padding-bottom:150px}
   <div class="info"><button type="button" class="pick" id="lkPick" aria-haspopup="listbox" aria-expanded="false" aria-label="Przejdź do części"><span id="lkPickT">Wstęp</span><svg viewBox="0 0 16 16"><path d="M3 6l5 5 5-5z"/></svg></button><span id="lkNow">Odsłuchaj wykład</span></div>
   <button type="button" class="skip" id="lkPrev" aria-label="Cofnij o 15 sekund" title="Cofnij o 15 sekund"></button>
   <button type="button" class="skip" id="lkNext" aria-label="Do przodu o 15 sekund" title="Do przodu o 15 sekund"></button>
-  <button type="button" id="lkStop" aria-label="Zatrzymaj"></button>
   <button type="button" id="lkSet" aria-label="Ustawienia lektora" aria-expanded="false"></button>
   <div class="seek">
     <time id="lkTc">0:00</time>
@@ -1177,7 +1176,7 @@ var $=function(s){return document.querySelector(s)};
 var A=$('#lkAudio'),ix=0,cur=null;
 var IC={play:'<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>',pause:'<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>',prev:'<svg viewBox="0 0 16 16"><path d="M2 2h2v12H2zM14 2v12L5 8z"/></svg>',next:'<svg viewBox="0 0 16 16"><path d="M12 2h2v12h-2zM2 2l9 6-9 6z"/></svg>',stop:'<svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z"/></svg>',gear:'<svg viewBox="0 0 16 16"><path d="M7 1h2l.4 2 1.5.7 1.7-1.2 1.4 1.4-1.2 1.7.7 1.5 2 .4v2l-2 .4-.7 1.5 1.2 1.7-1.4 1.4-1.7-1.2-1.5.7L9 15H7l-.4-2-1.5-.7-1.7 1.2-1.4-1.4 1.2-1.7L2.5 9 1 9V7l2-.4.7-1.5-1.2-1.7 1.4-1.4 1.7 1.2 1.5-.7zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/></svg>'};
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-$('#lkPlay').innerHTML=IC.play;$('#lkPrev').textContent='−15 s';$('#lkNext').textContent='+15 s';$('#lkStop').innerHTML=IC.stop;$('#lkSet').innerHTML=IC.gear;
+$('#lkPlay').innerHTML=IC.play;$('#lkPrev').textContent='−15 s';$('#lkNext').textContent='+15 s';$('#lkSet').innerHTML=IC.gear;
 
 function sec(i){return document.getElementById(PARTS[i].id)}
 function mark(i){if(cur)cur.classList.remove('reading');cur=i==null?null:sec(i);if(!cur)return;cur.classList.add('reading');}
@@ -1193,7 +1192,6 @@ A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textC
 A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1)playPart(ix+1);else{mark(null);ui()}});
 
 $('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
-$('#lkStop').addEventListener('click',stopAll);
 $('#lkPrev').addEventListener('click',function(){skip(-15)});
 $('#lkNext').addEventListener('click',function(){skip(15)});
 $('#lkSet').addEventListener('click',function(){var p=$('#lkPop');p.hidden=!p.hidden;this.setAttribute('aria-expanded',String(!p.hidden))});
