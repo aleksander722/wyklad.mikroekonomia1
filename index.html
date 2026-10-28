@@ -1,0 +1,1183 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Podaż i jej determinanty</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Układ: ciemnozielony pas tytułowy, lepka nawigacja po częściach, jedna kolumna tekstu (ok. 68 znaków) z szerszymi blokami ćwiczeń. */
+:root{
+  --bg:#F6FAF4; --surface:#FFFFFF; --ink:#0B2A22; --muted:#4A6158; --line:#D3E1D0;
+  --brand:#003228; --on-brand:#FFFFFF; --on-brand-muted:#B9D9C4;
+  --leaf:#6EC850; --leaf-soft:#C8F0B4; --leaf-wash:#E9F6E2; --accent-text:#1B6A2B;
+  --red:#C8102E; --red-wash:#FDE9EC; --sun:#F0DC8C; --sun-wash:#FBF5DB; --blue:#3F6787; --blue-wash:#E6F0F7;
+  --display:"Outfit","Trebuchet MS",Verdana,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#06180F; --surface:#0D241C; --ink:#E5F1E3; --muted:#9BB4A8; --line:#214034;
+  --brand:#00261E; --on-brand:#FFFFFF; --on-brand-muted:#A9CDB7;
+  --leaf:#6EC850; --leaf-soft:#2C5C35; --leaf-wash:#123226; --accent-text:#8EDB74;
+  --red:#FF7482; --red-wash:#3A151B; --sun:#F0DC8C; --sun-wash:#2D2A13; --blue:#9CC2DC; --blue-wash:#122B3A;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#06180F; --surface:#0D241C; --ink:#E5F1E3; --muted:#9BB4A8; --line:#214034;
+  --brand:#00261E; --on-brand:#FFFFFF; --on-brand-muted:#A9CDB7;
+  --leaf:#6EC850; --leaf-soft:#2C5C35; --leaf-wash:#123226; --accent-text:#8EDB74;
+  --red:#FF7482; --red-wash:#3A151B; --sun:#F0DC8C; --sun-wash:#2D2A13; --blue:#9CC2DC; --blue-wash:#122B3A;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+p{margin:0}
+a{color:var(--accent-text)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+
+/* pas tytułowy */
+.mast{background:var(--brand);color:var(--on-brand);padding-block:44px 40px;padding-inline:20px}
+.mast-in{max-width:1040px;margin:0 auto;display:grid;gap:22px}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--leaf)}
+.mast h1{font-size:clamp(30px,5.2vw,54px);font-weight:600;letter-spacing:-.015em;max-width:18ch}
+.mast h1 em{font-style:normal;color:var(--leaf)}
+.lede{max-width:62ch;color:var(--on-brand-muted);font-size:18px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--mono);font-size:13px;color:var(--on-brand-muted);border-top:1px solid rgba(255,255,255,.18);padding-top:16px}
+.meta b{color:var(--on-brand);font-weight:500}
+
+/* nawigacja */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1040px;margin:0 auto;padding-inline:20px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin}
+.nav button{border:0;background:none;padding:12px 10px;font-family:var(--display);font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent}
+.nav button:hover{color:var(--ink)}
+.nav button.on{color:var(--accent-text);border-bottom-color:var(--leaf)}
+.bar{height:3px;background:var(--leaf);width:0}
+
+/* treść */
+main{padding-inline:20px;padding-block:8px 80px}
+section{max-width:1040px;margin:0 auto;padding-block:52px 8px;display:grid;gap:22px}
+.col{max-width:720px;display:grid;gap:16px;min-width:0}
+.part{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+h2{font-size:clamp(26px,3.6vw,36px);font-weight:600;letter-spacing:-.01em}
+h3{font-size:21px;font-weight:600;margin-top:10px}
+h4{font-size:16px;font-weight:600}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:12px;padding:2px 8px;background:var(--leaf-wash);color:var(--accent-text);border:1px solid var(--leaf-soft)}
+ul,ol{margin:0;padding-left:22px;display:grid;gap:6px}
+strong{font-weight:700}
+.def{border-left:4px solid var(--leaf);padding:4px 0 4px 16px;font-size:18px}
+.note{background:var(--sun-wash);border:1px solid var(--sun);padding:14px 16px;display:grid;gap:6px}
+.note h4{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.fresh{background:var(--blue-wash);border:1px solid var(--blue);padding:14px 16px;display:grid;gap:6px}
+.fresh h4{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--blue)}
+
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15.5px;min-width:560px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:600;font-size:14px;background:var(--leaf-wash)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.box{background:var(--surface);border:1px solid var(--line);padding:14px 16px;display:grid;gap:6px;align-content:start;min-width:0}
+.box p{font-size:15.5px;color:var(--muted)}
+.box .who{font-family:var(--mono);font-size:12px;color:var(--accent-text);letter-spacing:.04em}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:1px solid var(--line);background:var(--surface)}
+.stat{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0;display:grid;gap:2px}
+.stat b{font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--muted)}
+.src{font-size:13.5px;color:var(--muted)}
+
+/* interakcje */
+.lab{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--brand);padding:20px;display:grid;gap:14px;min-width:0}
+.lab-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.lab-h span{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.btn{border:1px solid var(--brand);background:var(--brand);color:var(--on-brand);padding:8px 16px;font-family:var(--display);font-weight:500;font-size:15px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--leaf)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+label{font-size:14px;color:var(--muted);display:grid;gap:4px}
+input[type=number],input[type=search]{font:inherit;font-family:var(--mono);padding:8px 10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;max-width:220px}
+.out{font-family:var(--display);font-size:22px;font-weight:600}
+.hbar{display:grid;grid-template-columns:minmax(120px,190px) 1fr auto;gap:10px;align-items:center;font-size:14.5px}
+.hbar i{display:block;height:16px;background:var(--leaf);min-width:2px}
+.hbar i.alt{background:var(--blue)}
+.hbar em{font-style:normal;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13.5px}
+
+details{background:var(--surface);border:1px solid var(--line)}
+summary{padding:12px 16px;cursor:pointer;font-family:var(--display);font-weight:500;list-style-position:inside}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .ans{padding:14px 16px;display:grid;gap:10px;background:var(--leaf-wash)}
+.stack{display:grid;gap:10px}
+.case{background:var(--surface);border:1px solid var(--line);padding:18px;display:grid;gap:12px}
+.case .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.riddle{background:var(--sun-wash);border:1px solid var(--sun);padding:16px;display:grid;gap:10px}
+.riddle .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.riddle details{background:transparent;border:0;border-top:1px dashed var(--sun)}
+.riddle summary{padding:10px 0 0;font-size:15px}
+.riddle details[open] summary{border:0}
+.riddle .ans{background:transparent;padding:8px 0 0}
+
+.steps{display:flex;flex-wrap:wrap;gap:6px}
+.steps button{border:1px solid var(--line);background:var(--bg);padding:8px 12px;font-family:var(--display);font-size:14px}
+.steps button.on{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.stepbody{display:grid;gap:6px;min-height:110px}
+.stepbody .who{font-family:var(--mono);font-size:12.5px;color:var(--accent-text);letter-spacing:.05em;text-transform:uppercase}
+
+.q{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:10px}
+.q h4{font-family:var(--body);font-size:17px;font-weight:700}
+.q .n{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.opts{display:grid;gap:6px}
+.opts button{text-align:left;border:1px solid var(--line);background:var(--bg);padding:9px 12px}
+.opts button:hover:not(:disabled){border-color:var(--leaf)}
+.opts button.ok{background:var(--leaf-wash);border-color:var(--leaf);font-weight:600}
+.opts button.bad{background:var(--red-wash);border-color:var(--red)}
+.opts button:disabled{cursor:default}
+.exp{font-size:15.5px;color:var(--muted)}
+.score{font-family:var(--mono);font-size:14px}
+
+.sort{display:grid;gap:8px}
+.card{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);padding:10px 12px;background:var(--bg)}
+.card .cb{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.card .cb button{border:1px solid var(--line);background:var(--surface);padding:4px 9px;font-size:13.5px}
+.card.ok{background:var(--leaf-wash);border-color:var(--leaf)}
+.card.bad{background:var(--red-wash);border-color:var(--red)}
+.card small{display:block;color:var(--muted);font-size:13.5px}
+@media (max-width:560px){.card{grid-template-columns:1fr}.card .cb{justify-content:flex-start}.hbar{grid-template-columns:1fr auto}.hbar i{grid-column:1/-1;order:3}}
+
+.gl{display:grid;gap:0;border:1px solid var(--line);background:var(--surface)}
+.gl div{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:14px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.gl div:last-child{border-bottom:0}
+.gl b{font-family:var(--display);font-weight:600}
+.gl b small{display:block;font-family:var(--mono);font-weight:400;font-size:12px;color:var(--muted)}
+.gl span{font-size:15.5px}
+@media (max-width:560px){.gl div{grid-template-columns:1fr;gap:2px}}
+
+svg text{font-family:var(--body);fill:var(--ink)}
+.fl-box{fill:var(--surface);stroke:var(--line)}
+.fl-key{fill:var(--leaf-wash);stroke:var(--leaf)}
+.fl-brand{fill:var(--brand)}
+.fl-line{stroke:var(--muted);stroke-width:1.6;fill:none}
+.fl-t{font-size:15px;font-weight:700}
+.fl-s{font-size:12.5px;fill:var(--muted)}
+.fl-w{fill:var(--on-brand)}
+.fl-arrow{fill:var(--muted)}
+footer{max-width:1040px;margin:40px auto 0;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+section{scroll-margin-top:60px}
+</style>
+<style>
+/* Jasna odsłona barw SGGW: zieleń 360 C i jasna zieleń 7486 C na tle, ciemna zieleń 7729 C w tekście. */
+:root{--mast-a:#EEF8E8;--mast-b:#CFEFC0;--mast-ink:#003228;--mast-em:#2A8A3A;--mast-sub:#35574A;--mast-line:rgba(0,50,40,.16);
+  --bg:#F5FAF2;--brand:#1F6E43;--leaf:#6EC850;--leaf-soft:#C8F0B4;--leaf-wash:#EAF7E2;--accent-text:#1B6A2B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mast-a:#0E261C;--mast-b:#173F2B;--mast-ink:#EAF6E4;--mast-em:#8EDB74;--mast-sub:#B5D3BF;--mast-line:rgba(255,255,255,.16);
+  --bg:#06180F;--brand:#2C7A4F;--leaf-wash:#123226;--leaf-soft:#2C5C35;--accent-text:#8EDB74}}
+:root[data-theme="dark"]{--mast-a:#0E261C;--mast-b:#173F2B;--mast-ink:#EAF6E4;--mast-em:#8EDB74;--mast-sub:#B5D3BF;--mast-line:rgba(255,255,255,.16);
+  --bg:#06180F;--brand:#2C7A4F;--leaf-wash:#123226;--leaf-soft:#2C5C35;--accent-text:#8EDB74}
+.mast{background:linear-gradient(135deg,var(--mast-a) 0%,var(--mast-b) 100%);color:var(--mast-ink)}
+.mast .eyebrow{color:var(--accent-text)}
+.mast h1{color:var(--mast-ink)} .mast h1 em{color:var(--mast-em)}
+.mast .lede{color:var(--mast-sub)}
+.mast .meta{color:var(--mast-sub);border-top-color:var(--mast-line)} .mast .meta b{color:var(--mast-ink)}
+.lab{border-top-color:var(--leaf)}
+.c1{fill:none;stroke:var(--accent-text);stroke-width:2.6}
+.c2{fill:none;stroke:var(--leaf);stroke-width:2.6}
+.c3{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:6 4}
+.cg{stroke:var(--line);stroke-width:1}
+.cx{stroke:var(--muted);stroke-width:1.2}
+.cd{fill:var(--red);stroke:var(--surface);stroke-width:2}
+.ct{font-size:12px;fill:var(--muted);font-family:var(--mono)}
+.cl{font-size:13px;font-weight:700}
+.t1{fill:var(--accent-text)} .t2{fill:var(--leaf)} .t3{fill:var(--muted)}
+.dot{fill:var(--accent-text);opacity:.55}
+.dot.hi{fill:var(--leaf);opacity:1}
+.dot.lo{opacity:.12}
+.inside{fill:var(--leaf-wash)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:var(--bg);padding:8px 12px;font-family:var(--display);font-size:14px}
+.seg button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+label.sl{display:grid;gap:2px;font-size:14px;color:var(--muted);min-width:200px;flex:1}
+label.sl input{width:100%;accent-color:var(--brand)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 16px;font-size:16px;max-width:560px}
+.kv b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.fx{font-family:var(--mono);font-size:15.5px;background:var(--leaf-wash);border:1px solid var(--leaf-soft);padding:12px 14px;overflow-x:auto;white-space:nowrap}
+.fx small{display:block;font-family:var(--body);font-size:13.5px;color:var(--muted);white-space:normal;margin-top:4px}
+.tl{display:grid;gap:0;border-left:3px solid var(--leaf-soft);margin-left:6px}
+.tl button{display:grid;grid-template-columns:110px 1fr;gap:12px;text-align:left;border:0;background:none;padding:10px 14px;position:relative;font-family:var(--body)}
+.tl button::before{content:"";position:absolute;left:-9px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:3px solid var(--leaf)}
+.tl button.on{background:var(--leaf-wash)} .tl button.on::before{background:var(--leaf)}
+.tl .y{font-family:var(--mono);font-size:13px;color:var(--accent-text);padding-top:2px}
+.tl .n{font-family:var(--display);font-weight:600;font-size:16px}
+.tlp{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--leaf);padding:16px 18px;display:grid;gap:8px;align-content:start;min-width:0}
+.tlp .who{font-family:var(--mono);font-size:12px;color:var(--accent-text);letter-spacing:.06em;text-transform:uppercase}
+.tlw{display:grid;gap:14px;grid-template-columns:minmax(260px,1fr) minmax(0,1.3fr);align-items:start}
+@media (max-width:760px){.tlw{grid-template-columns:1fr}.tl button{grid-template-columns:86px 1fr}}
+.nd{cursor:pointer}
+.nd circle{fill:var(--surface);stroke:var(--leaf);stroke-width:2}
+.nd.on circle{fill:var(--leaf-wash);stroke:var(--accent-text);stroke-width:3}
+.nd:focus-visible{outline:none} .nd:focus-visible circle{stroke:var(--red);stroke-width:3}
+.nd text{font-size:12.5px;font-weight:600;fill:var(--ink)}
+.spk{stroke:var(--leaf-soft);stroke-width:2}
+.hub{fill:var(--brand)}
+.fl-box{fill:var(--surface);stroke:var(--line)}
+.fl-key{fill:var(--leaf-wash);stroke:var(--leaf)}
+.fl-hh{fill:var(--brand)}
+.fa{fill:none;stroke-width:2.2}
+.fa.m{stroke:var(--leaf)} .fa.r{stroke:var(--accent-text)} .fa.g{stroke:var(--blue)}
+.ah{stroke:none} .ah.m{fill:var(--leaf)} .ah.r{fill:var(--accent-text)} .ah.g{fill:var(--blue)}
+.fls{font-size:12.5px;font-weight:600}
+.fls.m{fill:var(--accent-text)} .fls.g{fill:var(--blue)}
+.lit li{padding-left:2px}
+.disc{background:var(--surface);border:1px solid var(--line);padding:14px 16px;display:grid;gap:6px}
+.disc .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+</style>
+<style>
+.two{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.two>div{min-width:0}
+.c4{fill:none;stroke:var(--red);stroke-width:2.6}
+.c5{fill:none;stroke:var(--muted);stroke-width:1.3}
+.c6{fill:none;stroke:var(--blue);stroke-width:2.4}
+.c7{fill:none;stroke:var(--blue);stroke-width:1.6;stroke-dasharray:6 4}
+.t4{fill:var(--red)} .t6{fill:var(--blue)}
+.cs{fill:var(--leaf);opacity:.3;stroke:none}
+.b1{fill:var(--accent-text);opacity:.85}.b2{fill:var(--leaf)}.b4{fill:var(--red);opacity:.75}.b5{fill:var(--muted);opacity:.35}
+.dt{fill:var(--accent-text);opacity:.45}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.leg i{display:inline-block;width:18px;height:3px;vertical-align:4px;margin-right:6px}
+.leg i.l1{background:var(--accent-text)}.leg i.l2{background:var(--leaf)}.leg i.l4{background:var(--red)}.leg i.l5{background:var(--muted)}.leg i.l6{background:var(--blue)}
+.leg i.sq{height:12px;width:12px;vertical-align:-1px}
+/* paski udziałów i wodospad */
+.hb{display:grid;gap:6px}
+.hb .r{display:grid;grid-template-columns:minmax(110px,170px) 1fr 64px;gap:10px;align-items:center;font-size:14.5px}
+.hb .tk{position:relative;height:18px;background:var(--bg);border:1px solid var(--line)}
+.hb .tk i{position:absolute;top:0;bottom:0;left:0;background:var(--leaf)}
+.hb .tk i.m{background:var(--accent-text)}
+.hb .tk i.n{background:var(--red);opacity:.8}
+.hb .tk.c::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--muted)}
+.hb em{font-style:normal;font-family:var(--mono);font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums}
+.hb .r.sum{border-top:1px solid var(--line);padding-top:6px;font-weight:700}
+/* macierz elastyczności krzyżowych */
+.hm{border-collapse:collapse;width:100%;min-width:520px}
+.hm th,.hm td{padding:0;border:1px solid var(--line);text-align:center}
+.hm th{padding:8px 6px;font-size:13.5px}
+.hm td button{width:100%;min-height:46px;border:0;background:transparent;font-family:var(--mono);font-size:14px;color:var(--ink)}
+.hm td button.on{outline:3px solid var(--brand);outline-offset:-3px}
+.hm td.dg button{font-style:italic;color:var(--muted)}
+/* klasyfikator */
+.cl-t td:first-child{font-family:var(--display);font-weight:600;white-space:nowrap;width:1%}
+.ok-l{color:var(--accent-text);font-weight:700}.bad-l{color:var(--red);font-weight:700}
+</style>
+<style>
+/* dodatki dla wykładu o podaży: pola nadwyżek, kolejka zasługowa (merit order), wykres pajęczyny */
+:root{--mo-w:#3F7FB0;--mo-pv:#E2B52B;--mo-bio:#6EC850;--mo-lig:#8A6A45;--mo-coal:#4D5A55;--mo-ccgt:#1F8C7A;--mo-ocgt:#D86A3C;--mo-imp:#A9B5AF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--mo-w:#7DB4E0;--mo-pv:#F0CF5A;--mo-bio:#7DD860;--mo-lig:#C29A6B;--mo-coal:#8C9A94;--mo-ccgt:#4CC4AE;--mo-ocgt:#F08E62;--mo-imp:#55625C}}
+:root[data-theme="dark"]{--mo-w:#7DB4E0;--mo-pv:#F0CF5A;--mo-bio:#7DD860;--mo-lig:#C29A6B;--mo-coal:#8C9A94;--mo-ccgt:#4CC4AE;--mo-ocgt:#F08E62;--mo-imp:#55625C}
+.a1{fill:var(--leaf);opacity:.38}.a2{fill:var(--blue);opacity:.22}.a4{fill:var(--red);opacity:.22}.a5{fill:var(--accent-text);opacity:.16}
+.cS{fill:none;stroke:var(--leaf);stroke-width:7;opacity:.45;stroke-linecap:round}
+.cw{fill:none;stroke:var(--red);stroke-width:1.8}
+.cwd{fill:var(--red);opacity:.85}
+.mo-w{fill:var(--mo-w)}.mo-pv{fill:var(--mo-pv)}.mo-bio{fill:var(--mo-bio)}.mo-lig{fill:var(--mo-lig)}.mo-coal{fill:var(--mo-coal)}.mo-ccgt{fill:var(--mo-ccgt)}.mo-ocgt{fill:var(--mo-ocgt)}.mo-imp{fill:var(--mo-imp)}
+.leg i.mo{height:12px;width:12px;vertical-align:-1px}
+.leg i.mo-w{background:var(--mo-w)}.leg i.mo-pv{background:var(--mo-pv)}.leg i.mo-bio{background:var(--mo-bio)}.leg i.mo-lig{background:var(--mo-lig)}.leg i.mo-coal{background:var(--mo-coal)}.leg i.mo-ccgt{background:var(--mo-ccgt)}.leg i.mo-ocgt{background:var(--mo-ocgt)}.leg i.mo-imp{background:var(--mo-imp)}
+.leg i.lS{background:var(--leaf);opacity:.6;height:6px;vertical-align:2px}
+.leg i.a1{background:var(--leaf);opacity:.5}.leg i.a2{background:var(--blue);opacity:.35}.leg i.a4{background:var(--red);opacity:.35}
+tr.mg td{background:var(--sun-wash);font-weight:600}
+tr.off td{color:var(--muted)}
+.shape{display:grid;gap:14px;grid-template-columns:minmax(0,1.25fr) minmax(250px,1fr);align-items:start}
+@media (max-width:760px){.shape{grid-template-columns:1fr}}
+.pill{display:inline-block;font-family:var(--mono);font-size:12px;padding:2px 8px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
+.pill.ok{border-color:var(--leaf);background:var(--leaf-wash);color:var(--accent-text)}
+.pill.bad{border-color:var(--red);background:var(--red-wash);color:var(--red)}
+.pill.mid{border-color:var(--sun);background:var(--sun-wash);color:var(--ink)}
+
+/* lektor (pliki mp3) */
+.lk{position:fixed;right:16px;bottom:16px;z-index:40;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--leaf);box-shadow:0 10px 30px rgba(0,50,40,.18);display:flex;align-items:center;gap:8px;padding:10px 12px;max-width:calc(100vw - 32px)}
+.lk button{border:1px solid var(--line);background:var(--bg);color:var(--ink);width:38px;height:38px;display:grid;place-items:center;padding:0;flex:none;cursor:pointer}
+.lk button svg{width:16px;height:16px;fill:currentColor}
+.lk button.main{background:var(--brand);border-color:var(--brand);color:#fff;width:46px;height:46px;border-radius:50%}
+.lk button.main svg{width:18px;height:18px}
+.lk .info{display:grid;min-width:0;width:200px}
+.lk .info b{font-family:var(--display);font-size:14px;font-weight:600}
+.lk .info span{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk-pop{position:absolute;right:0;bottom:calc(100% + 8px);background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--leaf);padding:14px;display:grid;gap:10px;width:300px;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,50,40,.18)}
+.lk-pop[hidden]{display:none}
+.lk-pop .chk{display:flex;gap:8px;align-items:center;color:var(--ink)}
+.lk-sec{justify-self:start;border:1px solid var(--leaf-soft);background:var(--leaf-wash);color:var(--accent-text);padding:6px 12px;font-family:var(--display);font-size:14px;font-weight:500;display:inline-flex;gap:8px;align-items:center;cursor:pointer}
+.lk-sec svg{width:12px;height:12px;fill:currentColor}
+section.reading{background:var(--leaf-wash);box-shadow:0 0 0 6px var(--leaf-wash)}
+main{padding-bottom:150px}
+@media (max-width:560px){.lk{left:8px;right:8px;bottom:8px;max-width:none}.lk .info{flex:1;width:auto}.lk button{width:34px;height:34px}}
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="eyebrow">Mikroekonomia · wykład pogłębiony</div>
+    <h1>Podaż i jej <em>determinanty</em></h1>
+    <p class="lede">Skąd bierze się krzywa podaży, co ją przesuwa i jak szybko producenci reagują na cenę. Od kosztu krańcowego firmy i kolejki elektrowni na rynku energii po cykl świński i ekonometryczną identyfikację podaży. Wykład z interaktywnymi modelami.</p>
+    <div class="meta">
+      <span><b>Prowadzący:</b> dr Arkadiusz Weremczuk</span>
+      <span><b>Kierunek:</b> informatyka i ekonometria, studia I stopnia</span>
+      <span><b>Wydział:</b> Zastosowań Informatyki i Matematyki SGGW</span>
+      <span><b>Kod:</b> ZIMIES_D.11.00145.23</span>
+      <span><b>Efekty:</b> W1 · W2 · U1</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Części wykładu">
+  <div class="nav-in" id="nav"></div>
+  <div class="bar" id="bar"></div>
+</nav>
+
+<main>
+
+<section id="s0" data-nav="Wstęp">
+  <div class="col">
+    <div class="part">Wprowadzenie</div>
+    <h2>Druga strona rynku</h2>
+    <p>Na poprzednim wykładzie analizowaliśmy rynek i popyt. Krzywa popytu opisuje gotowość do zapłaty, którą łatwo sobie wyobrazić, bo każdy z nas codziennie jest nabywcą. Za każdym punktem krzywej podaży stoi natomiast decyzja produkcyjna: ile zasiać, ile wyprodukować, czy uruchomić kolejny blok elektrowni, czy zatrzymać zboże w magazynie. Te decyzje zależą od kosztów, technologii, cen innych produktów, oczekiwań, polityki państwa i czasu potrzebnego na dostosowanie.</p>
+    <p>Ten wykład jest w całości poświęcony podaży. Zaczynamy od definicji i od źródła prawa podaży, czyli rosnącego kosztu krańcowego. Następnie omawiamy wszystkie ważne determinanty, elastyczność i dynamikę podaży, a na końcu pytanie najbliższe ekonometrii: jak oszacować krzywą podaży na podstawie danych, w których cena i ilość są wyznaczane jednocześnie.</p>
+    <h3>Po wykładzie potrafisz</h3>
+    <ul>
+      <li>zdefiniować podaż, odróżnić podaż od wielkości podaży i zapisać funkcję podaży w postaci liniowej, odwrotnej i potęgowej;</li>
+      <li>wyprowadzić krzywą podaży firmy z jej kosztów i zbudować podaż rynkową przez sumowanie, także w postaci kolejki zasługowej na rynku energii;</li>
+      <li>wymienić i zinterpretować determinanty pozacenowe podaży oraz pokazać, jak podatki i dotacje zmieniają kształt krzywej;</li>
+      <li>obliczyć i zinterpretować elastyczność podaży w krótkim i długim okresie;</li>
+      <li>wyjaśnić cykliczne wahania podaży modelem pajęczyny i oszacować reakcję podaży modelem Nerlove’a;</li>
+      <li>ocenić, kiedy regresja ilości na cenie odtwarza krzywą podaży, a kiedy potrzebna jest zmienna instrumentalna.</li>
+    </ul>
+  </div>
+  <div class="tw"><table>
+    <tr><th class="num">Część</th><th>Temat</th></tr>
+    <tr><td class="num">1</td><td>Istota podaży: pojęcia, prawo podaży, funkcja podaży, nadwyżka producenta</td></tr>
+    <tr><td class="num">2</td><td>Od kosztu do krzywej podaży: firma, gałąź, kolejka zasługowa na rynku energii</td></tr>
+    <tr><td class="num">3</td><td>Kształty krzywej podaży i wyjątki od prawa podaży</td></tr>
+    <tr><td class="num">4</td><td>Determinanty pozacenowe, podatki i dotacje</td></tr>
+    <tr><td class="num">5</td><td>Laboratorium podaży: wszystkie determinanty naraz</td></tr>
+    <tr><td class="num">6</td><td>Elastyczność podaży i czas dostosowania</td></tr>
+    <tr><td class="num">7</td><td>Dynamika podaży: model pajęczyny i model Nerlove’a</td></tr>
+    <tr><td class="num">8</td><td>Pomiar: identyfikacja krzywej podaży</td></tr>
+  </table></div>
+</section>
+
+<section id="s1" data-nav="1. Istota podaży">
+  <div class="col">
+    <div class="part">Część 1</div>
+    <h2>Istota podaży</h2>
+    <p class="def"><strong>Definicja.</strong> Podaż to zależność między ceną dobra a ilością, którą producenci chcą i mogą zaoferować do sprzedaży w określonym czasie i miejscu, przy niezmienionych pozostałych warunkach.</p>
+    <p>Każde słowo tej definicji coś wnosi. <strong>Chcą</strong> oznacza, że sprzedaż musi być opłacalna, czyli cena musi pokryć koszt wytworzenia dodatkowej jednostki. <strong>Mogą</strong> oznacza, że producent ma zdolności produkcyjne, zapasy i dostęp do czynników produkcji. <strong>W określonym czasie</strong> oznacza, że podaż jest strumieniem: 50 tysięcy ton miesięcznie to zupełnie inna podaż niż 50 tysięcy ton rocznie. <strong>Przy niezmienionych pozostałych warunkach</strong>, czyli ceteris paribus, oznacza, że krzywa podaży pokazuje wyłącznie wpływ ceny własnej dobra. Wszystkie inne czynniki są ustalone i ich zmiana przesuwa całą krzywą.</p>
+    <h3>Podaż a wielkość podaży</h3>
+    <p>To rozróżnienie jest tak samo ważne jak po stronie popytu. <strong>Wielkość podaży</strong> to jedna liczba: ilość oferowana przy konkretnej cenie, czyli jeden punkt na krzywej. <strong>Podaż</strong> to cała zależność, czyli cała krzywa. Zmiana ceny dobra powoduje ruch wzdłuż krzywej i zmianę wielkości podaży. Zmiana każdej innej determinanty przesuwa krzywą i zmienia podaż.</p>
+    <h3>Podaż, produkcja i zasób</h3>
+    <p>Podaż nie jest tym samym co produkcja. Producent może sprzedawać z zapasów, a więc więcej niż bieżąca produkcja, albo produkować na zapas, a więc sprzedawać mniej. Na rynku zbóż po żniwach produkcja jest już znana, a podaż rynkowa w kolejnych miesiącach zależy od decyzji o sprzedaży lub przechowaniu. Podaż odróżniamy też od zasobu: zapas mieszkań w mieście to zasób, a liczba mieszkań oferowanych do sprzedaży w kwartale to podaż.</p>
+    <h3>Prawo podaży i jego trzy źródła</h3>
+    <p><strong>Prawo podaży</strong> mówi, że przy niezmienionych pozostałych warunkach wzrost ceny dobra powoduje wzrost wielkości jego podaży. Nachylenie krzywej podaży jest dodatnie z trzech powodów.</p>
+    <ol>
+      <li><strong>Rosnący koszt krańcowy.</strong> W krótkim okresie część czynników jest stała. Dokładanie kolejnych jednostek czynnika zmiennego do stałej ziemi, maszyn czy hali daje coraz mniejsze przyrosty produktu, czyli działa prawo malejących przychodów krańcowych. Każda kolejna jednostka produktu kosztuje więc więcej i producent wytworzy ją tylko przy wyższej cenie.</li>
+      <li><strong>Zróżnicowanie producentów.</strong> Producenci mają różne koszty: inną jakość gleby, inny wiek maszyn, inne położenie. Wyższa cena wciąga na rynek producentów o wyższych kosztach. To tak zwany margines ekstensywny podaży.</li>
+      <li><strong>Przesuwanie zasobów między zastosowaniami.</strong> Gdy rośnie cena pszenicy, rolnik przeznacza na nią ziemię, która wcześniej służyła pod rzepak lub jęczmień. Kosztem wytworzenia pszenicy jest utracona możliwość uprawy innej rośliny, czyli koszt alternatywny.</li>
+    </ol>
+    <h3>Trzy zapisy tej samej zależności</h3>
+  </div>
+  <div class="grid">
+    <div class="box"><div class="who">Postać liniowa</div><div class="fx" style="white-space:normal">Q<sub>s</sub> = c + d·P, &nbsp;d &gt; 0</div><p>Parametr d mówi, o ile jednostek rośnie wielkość podaży, gdy cena rośnie o 1. Gdy c &lt; 0, prosta przecina oś ceny w punkcie P<sub>min</sub> = −c/d, czyli przy cenie progowej, poniżej której nic nie jest oferowane.</p></div>
+    <div class="box"><div class="who">Postać odwrotna</div><div class="fx" style="white-space:normal">P = −c/d + (1/d)·Q</div><p>Odczytujemy ją pionowo: jaka cena jest potrzebna, by producenci dostarczyli ilość Q. To minimalna cena podaży, a w konkurencji doskonałej koszt krańcowy ostatniej jednostki.</p></div>
+    <div class="box"><div class="who">Postać potęgowa</div><div class="fx" style="white-space:normal">Q<sub>s</sub> = A·P<sup>ε</sup> &nbsp;⇔&nbsp; ln Q = ln A + ε ln P</div><p>Elastyczność podaży jest stała i równa ε. Po zlogarytmowaniu model jest liniowy, dlatego tę postać najczęściej szacuje się w ekonometrii.</p></div>
+  </div>
+  <div class="col">
+    <h3>Nadwyżka producenta</h3>
+    <p>Krzywa podaży mówi, jaka minimalna cena wystarcza do wytworzenia każdej kolejnej jednostki. Producenci otrzymują jednak cenę rynkową za wszystkie jednostki. Różnica między ceną a minimalną ceną podaży, zsumowana po wszystkich sprzedanych jednostkach, to <strong>nadwyżka producenta</strong>. Na wykresie jest to pole nad krzywą podaży i pod linią ceny. W krótkim okresie nadwyżka producenta równa się przychodowi pomniejszonemu o koszty zmienne, czyli zyskowi powiększonemu o koszty stałe.</p>
+    <div class="fx">PS = ½ · Q* · (P* − P<sub>min</sub>)<small>Dla liniowej krzywej podaży, która przecina oś ceny w punkcie P<sub>min</sub>. Pole pod krzywą podaży to koszty zmienne wytworzenia ilości Q*.</small></div>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Podaż jabłek deserowych na rynku hurtowym</h3><span>Q<sub>s</sub> = −20 + 40·P</span></div>
+    <div class="row">
+      <label class="sl" for="aP">Cena hurtowa jabłek: <span id="aPv"></span><input id="aP" type="range" min="0.5" max="3.5" step="0.05" value="2"></label>
+    </div>
+    <div class="leg"><span><i class="l2"></i>krzywa podaży S</span><span><i class="sq a1"></i>nadwyżka producenta</span><span><i class="sq a2"></i>koszty zmienne</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="aC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Krzywa podaży jabłek z polem nadwyżki producenta"></svg></div>
+    <div class="kv" id="aK"></div>
+    <p class="exp">Ilość w tysiącach ton miesięcznie, cena w złotych za kilogram, kwoty w milionach złotych. Dane dydaktyczne.</p>
+  </div>
+</section>
+
+<section id="s2" data-nav="2. Koszt i podaż">
+  <div class="col">
+    <div class="part">Część 2</div>
+    <h2>Od kosztu do krzywej podaży</h2>
+    <p>W konkurencji doskonałej pojedyncza firma jest cenobiorcą: jej sprzedaż nie wpływa na cenę rynkową. Maksymalizuje zysk π(q) = P·q − TC(q). Warunek pierwszego rzędu daje regułę, od której zależy cała teoria podaży.</p>
+    <div class="fx">P = MC(q), &nbsp; MC′(q) &gt; 0, &nbsp; P ≥ min AVC<small>Firma zwiększa produkcję, dopóki dodatkowa jednostka przynosi więcej, niż kosztuje. Warunek drugiego rzędu wymaga rosnącego kosztu krańcowego, dlatego firma działa na rosnącej gałęzi MC.</small></div>
+    <p>W krótkim okresie koszty stałe trzeba ponieść niezależnie od decyzji, więc nie wpływają one na wybór między produkcją a jej wstrzymaniem. Firma produkuje, jeśli przychód pokrywa przynajmniej koszty zmienne, czyli gdy cena jest nie niższa od minimum przeciętnego kosztu zmiennego AVC. Ten punkt to <strong>próg zamknięcia</strong>. Punkt, w którym cena równa się minimum przeciętnego kosztu całkowitego ATC, to <strong>próg rentowności</strong>. Krótkookresowa krzywa podaży firmy to więc rosnąca część krzywej kosztu krańcowego powyżej minimum AVC, a poniżej tego progu podaż jest zerowa. W długim okresie wszystkie koszty są zmienne i firma pozostaje w gałęzi tylko wtedy, gdy cena pokrywa minimum przeciętnego kosztu długookresowego.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Podaż firmy z jej kosztów</h3><span>TC = FC + 10q − 1,2q² + 0,06q³</span></div>
+    <div class="row">
+      <label class="sl" for="fP">Cena rynkowa P: <span id="fPv"></span><input id="fP" type="range" min="1" max="20" step="0.25" value="9"></label>
+      <label class="sl" for="fF">Koszty stałe FC: <span id="fFv"></span><input id="fF" type="range" min="0" max="80" step="5" value="40"></label>
+    </div>
+    <div class="leg"><span><i class="l1"></i>koszt krańcowy MC</span><span><i class="l2"></i>przeciętny koszt zmienny AVC</span><span><i class="l6"></i>przeciętny koszt całkowity ATC</span><span><i class="lS"></i>krzywa podaży firmy</span><span><i class="sq a1"></i>zysk</span><span><i class="sq a4"></i>strata</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="fC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Koszty firmy i jej krzywa podaży"></svg></div>
+    <div class="kv" id="fK"></div>
+    <p class="exp" id="fO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <h3>Podaż rynkowa jako suma podaży firm</h3>
+    <p>Podaż rynkową otrzymujemy przez <strong>sumowanie poziome</strong>: przy każdej cenie dodajemy ilości oferowane przez wszystkie firmy, Q(P) = Σ q<sub>i</sub>(P). Jeśli w gałęzi działa n jednakowych firm, Q(P) = n·q(P). Wynika stąd wprost, że liczba producentów jest determinantą podaży rynkowej. Gdy firmy różnią się kosztami, krzywa rynkowa ma kształt schodów: przy niskiej cenie produkują tylko najtańsi, a każda wyższa cena uruchamia kolejnych producentów.</p>
+    <h3>Kolejka zasługowa na rynku energii elektrycznej</h3>
+    <p>Najczystszym przykładem takiej krzywej jest rynek hurtowy energii. Operator rynku układa oferty elektrowni od najtańszej do najdroższej. Powstaje <strong>kolejka zasługowa</strong>, w języku branży merit order, czyli krzywa podaży w postaci schodów. O kolejności decyduje koszt krańcowy wytworzenia megawatogodziny: dla wiatru i słońca jest bliski zeru, dla elektrowni cieplnych obejmuje koszt paliwa podzielony przez sprawność oraz koszt uprawnień do emisji CO<sub>2</sub> w systemie EU ETS.</p>
+    <div class="fx">MC = P<sub>paliwa</sub> / η + e · P<sub>CO₂</sub><small>η to sprawność elektrowni, e to emisja dwutlenku węgla w tonach na megawatogodzinę. Dla węgla brunatnego e wynosi około 1,1, dla turbiny gazowej w cyklu kombinowanym około 0,37.</small></div>
+    <p>Cenę rozliczeniową wyznacza koszt krańcowy ostatniej elektrowni potrzebnej do pokrycia zapotrzebowania. Wszystkie tańsze źródła otrzymują tę samą cenę i zarabiają różnicę między nią a własnym kosztem krańcowym. To <strong>renta inframarginalna</strong>, czyli nadwyżka producenta w czystej postaci. W modelu poniżej zobaczysz, jak ceny paliw, cena CO<sub>2</sub>, pogoda i zapotrzebowanie przesuwają krzywą podaży i zmieniają cenę.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Rynek energii: krzywa podaży z kosztów elektrowni</h3><span>jedna godzina, model dydaktyczny</span></div>
+    <div class="seg" id="mS"></div>
+    <div class="row">
+      <label class="sl" for="mD">Zapotrzebowanie: <span id="mDv"></span><input id="mD" type="range" min="12" max="28" step="0.5" value="21"></label>
+      <label class="sl" for="mW">Dostępna moc wiatrowa: <span id="mWv"></span><input id="mW" type="range" min="0" max="10" step="0.5" value="4"></label>
+      <label class="sl" for="mV">Dostępna moc fotowoltaiczna: <span id="mVv"></span><input id="mV" type="range" min="0" max="12" step="0.5" value="3"></label>
+      <label class="sl" for="mG">Cena gazu ziemnego: <span id="mGv"></span><input id="mG" type="range" min="80" max="700" step="10" value="200"></label>
+      <label class="sl" for="mK">Koszt paliwa elektrowni na węgiel kamienny: <span id="mKv"></span><input id="mK" type="range" min="150" max="700" step="10" value="250"></label>
+      <label class="sl" for="mE">Cena uprawnienia do emisji CO₂: <span id="mEv"></span><input id="mE" type="range" min="100" max="700" step="10" value="320"></label>
+    </div>
+    <div class="leg"><span><i class="mo mo-pv"></i>fotowoltaika</span><span><i class="mo mo-w"></i>wiatr</span><span><i class="mo mo-bio"></i>biomasa</span><span><i class="mo mo-lig"></i>węgiel brunatny</span><span><i class="mo mo-coal"></i>węgiel kamienny</span><span><i class="mo mo-ccgt"></i>gaz, cykl kombinowany</span><span><i class="mo mo-ocgt"></i>gaz, turbiny szczytowe</span><span><i class="mo mo-imp"></i>import i rezerwy</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="mC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Kolejka zasługowa elektrowni i cena rozliczeniowa"></svg></div>
+    <div class="tw"><table id="mT"></table></div>
+    <div class="kv" id="mK2"></div>
+    <p class="exp" id="mO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <div class="fresh"><h4>Z praktyki</h4><p>W 2022 roku gwałtowny wzrost cen gazu i węgla podniósł cenę rozliczeniową w całej Unii. Źródła o niskim koszcie krańcowym, przede wszystkim wiatr i słońce, uzyskały bardzo wysokie renty inframarginalne. Rozporządzenie Rady (UE) 2022/1854 wprowadziło wtedy tymczasowy pułap przychodów rynkowych takich wytwórców na poziomie 180 euro za megawatogodzinę. W Polsce równolegle zastosowano limity cen dla odbiorców i odpisy na fundusz wypłaty różnicy ceny.</p></div>
+    <p>Model pokazuje też dwa zjawiska ważne dla transformacji energetycznej. Przy wysokiej cenie uprawnień do emisji elektrownia gazowa może wyprzedzić w kolejce elektrownię na węgiel brunatny, choć paliwo gazowe jest droższe. Nazywa się to przełączeniem paliw. W słoneczne południe z dużą generacją fotowoltaiczną krzywa podaży przesuwa się tak daleko w prawo, że cena spada niemal do zera. Im więcej mocy słonecznej w systemie, tym niższa cena w godzinach jej pracy, co nazywamy efektem kanibalizacji.</p>
+  </div>
+</section>
+
+<section id="s3" data-nav="3. Kształty i wyjątki">
+  <div class="col">
+    <div class="part">Część 3</div>
+    <h2>Kształty krzywej podaży i wyjątki od prawa podaży</h2>
+    <p>Typowa krzywa podaży rośnie i jest wypukła, bo koszt krańcowy rośnie coraz szybciej w miarę zbliżania się do granicy zdolności produkcyjnych. Istnieją jednak rynki i horyzonty czasowe, w których krzywa jest pionowa, pozioma, opadająca, a nawet wygięta wstecz. Każdy z tych kształtów ma konkretne źródło ekonomiczne.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Galeria kształtów krzywej podaży</h3><span>sześć przypadków</span></div>
+    <div class="seg" id="hS"></div>
+    <div class="shape">
+      <div class="tw" style="border:0;background:none"><svg id="hC" viewBox="0 0 640 360" width="100%" style="min-width:300px" role="img" aria-label="Wybrany kształt krzywej podaży"></svg></div>
+      <div class="tlp" id="hD" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="col">
+    <h3>Długookresowa podaż gałęzi według Marshalla</h3>
+    <p>W długim okresie firmy wchodzą do gałęzi, gdy zysk ekonomiczny jest dodatni, i wychodzą z niej, gdy jest ujemny. Kształt długookresowej krzywej podaży gałęzi zależy od tego, co dzieje się z kosztami firm, gdy gałąź się rozrasta. Alfred Marshall wyróżnił trzy przypadki.</p>
+    <ul>
+      <li><strong>Gałąź o stałych kosztach.</strong> Wejście nowych firm nie zmienia cen czynników produkcji. Długookresowa podaż jest pozioma na poziomie minimum przeciętnego kosztu. Przykład: usługi fryzjerskie w dużym mieście.</li>
+      <li><strong>Gałąź o rosnących kosztach.</strong> Ekspansja podnosi ceny czynników specyficznych, na przykład ziemi, wykwalifikowanej pracy czy rzadkich surowców. Długookresowa podaż rośnie. Przykład: sadownictwo, które konkuruje o ziemię i sezonowych pracowników.</li>
+      <li><strong>Gałąź o malejących kosztach.</strong> Ekspansja obniża koszty wszystkich firm dzięki korzyściom skali zewnętrznym: wyspecjalizowanym dostawcom, wspólnemu rynkowi pracy, przepływom wiedzy i uczeniu się przez praktykę. Długookresowa podaż opada. Przykład: moduły fotowoltaiczne i baterie litowo-jonowe.</li>
+    </ul>
+    <p>Ostatni przypadek opisuje krzywa doświadczenia. Theodore Wright w 1936 roku zauważył w przemyśle lotniczym, że każde podwojenie skumulowanej produkcji obniża koszt jednostkowy o w przybliżeniu stały odsetek. Dla modułów fotowoltaicznych ten odsetek wynosi około 20 procent, co w branży nazywa się prawem Swansona. Dzięki temu koszt energii z dużych farm słonecznych spadł w latach 2010–2020 o ponad 80 procent.</p>
+    <div class="fx">c(X) = c<sub>1</sub> · X<sup>−b</sup>, &nbsp; stopa uczenia się = 1 − 2<sup>−b</sup><small>Przy stopie uczenia się 20 procent b ≈ 0,32. Dziesięciokrotny wzrost skumulowanej produkcji obniża wtedy koszt o około 52 procent.</small></div>
+  </div>
+</section>
+
+<section id="s4" data-nav="4. Determinanty">
+  <div class="col">
+    <div class="part">Część 4</div>
+    <h2>Determinanty pozacenowe podaży</h2>
+    <p>Zapiszmy ogólną funkcję podaży, w której cena własna jest tylko jedną z wielu zmiennych. Każda z pozostałych zmiennych to determinanta pozacenowa. Jej zmiana przesuwa krzywą podaży: w prawo, gdy przy każdej cenie producenci oferują więcej, albo w lewo, gdy oferują mniej. Równoważnie można mówić o przesunięciu w dół lub w górę, bo krzywa podaży jest krzywą minimalnej ceny podaży.</p>
+    <div class="fx">Q<sub>s</sub> = f(P; w, T, P<sub>alt</sub>, P<sub>łącz</sub>, N, P<sup>e</sup>, t, s, Z)<small>w ceny czynników produkcji · T technologia · P<sub>alt</sub> ceny dóbr konkurencyjnych w produkcji · P<sub>łącz</sub> ceny dóbr produkowanych łącznie · N liczba producentów · P<sup>e</sup> oczekiwana cena · t, s podatki i dotacje · Z warunki naturalne i losowe</small></div>
+    <h3>Skąd biorą się determinanty: podaż z funkcji produkcji</h3>
+    <p>Determinanty nie są listą do zapamiętania. Wynikają wprost z rachunku maksymalizacji zysku. Weźmy firmę z funkcją produkcji Cobba-Douglasa q = A·L<sup>α</sup>, gdzie L to czynnik zmienny opłacany stawką w, A to poziom technologii, a 0 &lt; α &lt; 1 oznacza malejące przychody krańcowe. Warunek p·α·A·L<sup>α−1</sup> = w daje optymalne zatrudnienie, a po podstawieniu funkcję podaży.</p>
+    <div class="fx">q*(p, w, A) = A<sup>1/(1−α)</sup> · (α·p / w)<sup>α/(1−α)</sup><small>Elastyczność względem ceny produktu: α/(1−α) · względem ceny czynnika: −α/(1−α) · względem technologii: 1/(1−α). Funkcja jest jednorodna stopnia zero względem p i w: podwojenie wszystkich cen nie zmienia podaży.</small></div>
+    <p>Wzór pokazuje trzy determinanty naraz: cenę czynnika produkcji, technologię i parametr α, który opisuje, jak szybko maleją przychody krańcowe. Im bliżej jedności jest α, tym słabiej rośnie koszt krańcowy i tym bardziej elastyczna jest podaż. Ta sama logika stoi za lematem Hotellinga: funkcja podaży jest pochodną funkcji zysku względem ceny produktu, q(p, w) = ∂π/∂p. Ekonometrycy wykorzystują to, szacując funkcje zysku z ograniczeniami wynikającymi z teorii.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Podaż z funkcji Cobba-Douglasa</h3><span>q = A·L<sup>α</sup></span></div>
+    <div class="row">
+      <label class="sl" for="cA">Parametr α: <span id="cAv"></span><input id="cA" type="range" min="0.2" max="0.8" step="0.05" value="0.5"></label>
+      <label class="sl" for="cW">Cena czynnika w: <span id="cWv"></span><input id="cW" type="range" min="5" max="20" step="0.5" value="10"></label>
+      <label class="sl" for="cT">Technologia A: <span id="cTv"></span><input id="cT" type="range" min="0.6" max="1.6" step="0.05" value="1"></label>
+    </div>
+    <div class="leg"><span><i class="l5"></i>podaż przy w = 10 i A = 1</span><span><i class="l1"></i>podaż przy wybranych parametrach</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="cC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Krzywa podaży wyprowadzona z funkcji produkcji"></svg></div>
+    <div class="kv" id="cK"></div>
+    <p class="exp" id="cO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <h3>Przegląd determinant</h3>
+  </div>
+  <div class="tw"><table>
+    <tr><th>Determinanta</th><th>Kierunek przesunięcia podaży</th><th>Mechanizm</th><th>Przykład</th></tr>
+    <tr><td><strong>Ceny czynników produkcji</strong></td><td>wzrost ceny czynnika: w lewo</td><td>wyższy koszt krańcowy przy każdej ilości</td><td>wzrost cen nawozów azotowych w latach 2021–2022, gdy podrożał gaz, z którego produkuje się amoniak</td></tr>
+    <tr><td><strong>Technologia</strong></td><td>postęp technologiczny: w prawo</td><td>więcej produktu z tych samych nakładów, niższy koszt krańcowy</td><td>rolnictwo precyzyjne, nowe odmiany, robotyzacja udojów</td></tr>
+    <tr><td><strong>Ceny dóbr konkurencyjnych w produkcji</strong></td><td>wzrost ceny substytutu w produkcji: w lewo</td><td>zasoby przechodzą do bardziej opłacalnego zastosowania</td><td>droższy rzepak zmniejsza podaż pszenicy, bo konkurują o tę samą ziemię</td></tr>
+    <tr><td><strong>Ceny dóbr produkowanych łącznie</strong></td><td>wzrost ceny dobra łącznego: w prawo</td><td>więcej jednego produktu oznacza automatycznie więcej drugiego</td><td>droższe masło zwiększa podaż odtłuszczonego mleka w proszku; droższa wołowina zwiększa podaż skór</td></tr>
+    <tr><td><strong>Liczba producentów</strong></td><td>więcej producentów: w prawo</td><td>sumowanie poziome podaży firm</td><td>nowe farmy wiatrowe po złagodzeniu zasad lokalizacji</td></tr>
+    <tr><td><strong>Oczekiwania cenowe</strong></td><td>oczekiwany wzrost ceny: bieżąca podaż w lewo</td><td>dobra trwałe i magazynowalne sprzedaje się później</td><td>rolnicy wstrzymują sprzedaż zboża, licząc na wyższe ceny na przednówku</td></tr>
+    <tr><td><strong>Podatki i dotacje</strong></td><td>podatek: w lewo; dotacja: w prawo</td><td>klin między ceną płaconą przez nabywcę a otrzymywaną przez producenta</td><td>akcyza na paliwa, dopłaty do produkcji, kontrakty różnicowe dla morskich farm wiatrowych</td></tr>
+    <tr><td><strong>Regulacje i limity</strong></td><td>zaostrzenie: zwykle w lewo</td><td>dodatkowe koszty dostosowania lub prawne ograniczenie ilości</td><td>kwoty mleczne w UE w latach 1984–2015, normy dobrostanu zwierząt, koszt uprawnień do emisji CO<sub>2</sub></td></tr>
+    <tr><td><strong>Warunki naturalne i szoki losowe</strong></td><td>niekorzystne: w lewo</td><td>niższe plony lub utrata zdolności produkcyjnych</td><td>susza rolnicza w 2018 roku, afrykański pomór świń w Polsce od 2014 roku, bezwietrzna pogoda dla energetyki</td></tr>
+    <tr><td><strong>Koszt kapitału</strong></td><td>wyższa stopa procentowa: w lewo</td><td>droższe finansowanie zapasów i inwestycji</td><td>szczególnie ważny w gałęziach kapitałochłonnych, jak energetyka odnawialna i budownictwo</td></tr>
+  </table></div>
+  <div class="col">
+    <h3>Dobra konkurencyjne i dobra łączne w produkcji</h3>
+    <p>Po stronie popytu mówimy o substytutach i komplementach w konsumpcji. Po stronie podaży odpowiednikami są <strong>dobra konkurencyjne w produkcji</strong>, które korzystają z tych samych zasobów, oraz <strong>dobra łączne</strong>, które powstają w jednym procesie. Rynek mleka dostarcza wzorcowego przykładu. Z mleka surowego mleczarnia odwirowuje śmietankę, z której robi masło, a pozostałe mleko odtłuszczone suszy na proszek. Masło i odtłuszczone mleko w proszku są dobrami łącznymi: wzrost ceny masła zwiększa przerób, a przy okazji podaż proszku, którego cena spada. Jednocześnie ser i masło są konkurencyjne w produkcji, bo korzystają z tego samego tłuszczu mlecznego.</p>
+    <h3>Oczekiwania: dwa przeciwne kierunki</h3>
+    <p>Wpływ oczekiwań zależy od tego, czy dobro można przechowywać. Dla dóbr magazynowalnych oczekiwany wzrost ceny zmniejsza podaż bieżącą, bo opłaca się sprzedać później. Dla dóbr nietrwałych, ale wytwarzanych z opóźnieniem, oczekiwany wzrost ceny zwiększa przyszłą podaż, bo producenci już dziś rozpoczynają produkcję, na przykład zostawiają więcej loszek do rozrodu. Opóźnienie produkcyjne połączone z oczekiwaniami prowadzi do wahań omawianych w części 7.</p>
+    <h3>Struktura rynku: kiedy krzywa podaży nie istnieje</h3>
+    <p>Krzywa podaży jest pojęciem konkurencji doskonałej. Zakłada, że producent przyjmuje cenę jako daną i dobiera do niej ilość. Monopolista wybiera jednocześnie cenę i ilość na krzywej popytu, zgodnie z warunkiem MR = MC, czyli P = MC / (1 − 1/|ε<sub>d</sub>|). Ta sama ilość może być oferowana przy różnych cenach, zależnie od elastyczności popytu. Dlatego monopolista nie ma krzywej podaży, a ma jedynie regułę wyboru zależną od popytu.</p>
+    <h3>Podatki i dotacje: przesunięcie czy obrót</h3>
+    <p>Podatek nałożony na producenta wbija klin między cenę płaconą przez nabywcę P<sub>d</sub> a cenę otrzymywaną przez producenta P<sub>s</sub>. Krzywa podaży wyrażona w cenach nabywcy zmienia się różnie, zależnie od formy podatku.</p>
+    <ul>
+      <li><strong>Podatek kwotowy t</strong>, na przykład akcyza w złotych od litra: P = P<sub>s</sub>(Q) + t. Krzywa przesuwa się równolegle w górę o t.</li>
+      <li><strong>Podatek ad valorem τ</strong>, procentowy, na przykład VAT: P = (1 + τ)·P<sub>s</sub>(Q). Krzywa obraca się w górę, a odstęp rośnie wraz z ceną.</li>
+      <li><strong>Dotacja kwotowa s</strong>: P = P<sub>s</sub>(Q) − s. Krzywa przesuwa się w dół o s, czyli w prawo.</li>
+    </ul>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Jak podatek i dotacja zmieniają krzywą podaży</h3><span>S: Q = −20 + 40P · D: Q = 130 − 20P</span></div>
+    <div class="seg" id="tS"></div>
+    <div class="row">
+      <label class="sl" for="tV">Wysokość instrumentu: <span id="tVv"></span><input id="tV" type="range" min="0" max="100" step="1" value="50"></label>
+    </div>
+    <div class="leg"><span><i class="l5"></i>podaż bez instrumentu S₀</span><span><i class="l2"></i>podaż w cenach nabywcy S₁</span><span><i class="l1"></i>popyt D</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="tC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Przesunięcie krzywej podaży przez podatek lub dotację"></svg></div>
+    <div class="kv" id="tK"></div>
+    <p class="exp" id="tO" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="s5" data-nav="5. Laboratorium">
+  <div class="col">
+    <div class="part">Część 5</div>
+    <h2>Laboratorium podaży</h2>
+    <p>Poniższy model łączy determinanty w jednej liniowej funkcji podaży pszenicy w Polsce. Współczynniki są dydaktyczne, ale ich znaki odpowiadają teorii, a skala odpowiada krajowemu rynkowi, na którym zbiory pszenicy wynoszą kilkanaście milionów ton rocznie. Zmieniaj determinanty pojedynczo albo wybierz scenariusz. Linia przerywana pokazuje popyt, abyś widział, jak przesunięcie podaży zmienia cenę i ilość równowagi.</p>
+    <div class="fx">Q<sub>s</sub> = c(w, T, P<sub>rz</sub>, Z, N, P<sup>e</sup>, r) + 0,01·(P + s)<small>Q<sub>s</sub> w mln ton, P cena pszenicy w zł za tonę, s dopłata do tony. Determinanty przesuwają wyraz wolny c, czyli całą krzywą.</small></div>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Podaż pszenicy: wszystkie determinanty</h3><span>model liniowy</span></div>
+    <div class="seg" id="gS"></div>
+    <div class="row">
+      <label class="sl" for="gP">Cena pszenicy P (ruch wzdłuż): <span id="gPv"></span><input id="gP" type="range" min="400" max="1600" step="10" value="900"></label>
+      <label class="sl" for="gF">Indeks cen nawozów: <span id="gFv"></span><input id="gF" type="range" min="80" max="300" step="5" value="100"></label>
+      <label class="sl" for="gO">Cena oleju napędowego: <span id="gOv"></span><input id="gO" type="range" min="5" max="9" step="0.1" value="6.5"></label>
+      <label class="sl" for="gR">Cena rzepaku: <span id="gRv"></span><input id="gR" type="range" min="1500" max="3000" step="50" value="2000"></label>
+      <label class="sl" for="gT">Technologia i odmiany: <span id="gTv"></span><input id="gT" type="range" min="0" max="10" step="0.5" value="5"></label>
+      <label class="sl" for="gZ">Pogoda w sezonie: <span id="gZv"></span><input id="gZ" type="range" min="-3" max="2" step="0.5" value="0"></label>
+      <label class="sl" for="gN">Liczba producentów: <span id="gNv"></span><input id="gN" type="range" min="80" max="120" step="1" value="100"></label>
+      <label class="sl" for="gE">Oczekiwana zmiana ceny: <span id="gEv"></span><input id="gE" type="range" min="-20" max="20" step="1" value="0"></label>
+      <label class="sl" for="gI">Oprocentowanie kredytu: <span id="gIv"></span><input id="gI" type="range" min="2" max="14" step="0.5" value="7"></label>
+      <label class="sl" for="gD">Dopłata do tony: <span id="gDv"></span><input id="gD" type="range" min="0" max="200" step="10" value="0"></label>
+    </div>
+    <div class="leg"><span><i class="l5"></i>podaż wyjściowa S₀</span><span><i class="l2"></i>podaż po zmianach S₁</span><span><i class="l1"></i>popyt D</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="gC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Przesunięcie krzywej podaży pszenicy"></svg></div>
+    <h4>Wkład determinant w przesunięcie krzywej podaży (mln t)</h4>
+    <div class="hb" id="gW"></div>
+    <div class="kv" id="gK"></div>
+    <p class="exp" id="gX" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <h3>Ruch czy przesunięcie?</h3>
+    <p>Rozpoznaj skutek każdego zdarzenia dla wskazanej krzywej podaży. Pamiętaj, że zdarzenia działające przez popyt zmieniają cenę, więc z punktu widzenia podaży oznaczają ruch wzdłuż krzywej.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><span class="score" id="vS">Trafienia: 0 / 12</span><button class="btn ghost" id="vR" type="button">Od nowa</button></div>
+    <div class="sort" id="vL"></div>
+  </div>
+</section>
+
+<section id="s6" data-nav="6. Elastyczność">
+  <div class="col">
+    <div class="part">Część 6</div>
+    <h2>Elastyczność podaży i czas dostosowania</h2>
+    <p><strong>Cenowa elastyczność podaży</strong> mierzy, o ile procent zmienia się wielkość podaży, gdy cena zmienia się o jeden procent. Ponieważ krzywa podaży rośnie, elastyczność jest dodatnia.</p>
+    <div class="fx">E<sub>s</sub> = %ΔQ<sub>s</sub> / %ΔP = (dQ<sub>s</sub>/dP) · (P/Q<sub>s</sub>)<small>Wersja łukowa: E<sub>s</sub> = [(Q<sub>1</sub> − Q<sub>0</sub>)/Q̄] / [(P<sub>1</sub> − P<sub>0</sub>)/P̄], gdzie Q̄ i P̄ to średnie z dwóch punktów.</small></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>Wartość</th><th>Nazwa</th><th>Interpretacja</th><th>Przykład</th></tr>
+    <tr><td class="num">E<sub>s</sub> = 0</td><td>doskonale nieelastyczna</td><td>ilość nie reaguje na cenę, krzywa pionowa</td><td>bilety na konkretny koncert, świeże ryby pod koniec dnia targowego</td></tr>
+    <tr><td class="num">0 &lt; E<sub>s</sub> &lt; 1</td><td>nieelastyczna</td><td>ilość rośnie wolniej niż cena</td><td>większość płodów rolnych w ciągu jednego sezonu</td></tr>
+    <tr><td class="num">E<sub>s</sub> = 1</td><td>proporcjonalna</td><td>ilość rośnie w tym samym tempie co cena</td><td>każda podaż liniowa przechodząca przez początek układu</td></tr>
+    <tr><td class="num">E<sub>s</sub> &gt; 1</td><td>elastyczna</td><td>ilość rośnie szybciej niż cena</td><td>produkty przemysłowe przy wolnych mocach, oprogramowanie</td></tr>
+    <tr><td class="num">E<sub>s</sub> → ∞</td><td>doskonale elastyczna</td><td>przy danej cenie dowolna ilość, krzywa pozioma</td><td>gałąź o stałych kosztach w długim okresie, import małego kraju po cenie światowej</td></tr>
+  </table></div>
+  <div class="col">
+    <h3>Elastyczność liniowej krzywej podaży</h3>
+    <p>Dla podaży liniowej Q = c + d·P elastyczność wynosi E<sub>s</sub> = d·P / (c + d·P). Rozstrzyga o niej to, gdzie prosta przecina osie, a nie jej nachylenie. Gdy prosta przecina oś ceny (c &lt; 0), podaż jest elastyczna w każdym punkcie. Gdy przechodzi przez początek układu (c = 0), elastyczność wynosi dokładnie 1. Gdy przecina oś ilości (c &gt; 0), podaż jest nieelastyczna w każdym punkcie. W każdym przypadku wraz ze wzrostem ceny elastyczność zbliża się do 1.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Gdzie prosta przecina oś, taka elastyczność</h3><span>E<sub>s</sub> = dP / (c + dP)</span></div>
+    <div class="row">
+      <label class="sl" for="eC">Wyraz wolny c: <span id="eCv"></span><input id="eC" type="range" min="-60" max="60" step="5" value="-30"></label>
+      <label class="sl" for="eD">Nachylenie d: <span id="eDv"></span><input id="eD" type="range" min="8" max="30" step="1" value="20"></label>
+      <label class="sl" for="eP">Cena P: <span id="ePv"></span><input id="eP" type="range" min="0.5" max="9.5" step="0.1" value="5"></label>
+    </div>
+    <div class="leg"><span><i class="l1"></i>podaż Q = c + dP</span><span><i class="l5"></i>prosta przez początek układu, E<sub>s</sub> = 1</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="eG" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Liniowa krzywa podaży i jej elastyczność"></svg></div>
+    <div class="kv" id="eK"></div>
+    <p class="exp" id="eO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <h3>Od czego zależy elastyczność podaży</h3>
+    <ul>
+      <li><strong>Czas.</strong> To najważniejsza determinanta. Im dłuższy okres, tym więcej czynników można dostosować i tym bardziej elastyczna jest podaż.</li>
+      <li><strong>Wolne moce produkcyjne.</strong> Firma pracująca na 60 procent zdolności zwiększy produkcję niewielkim kosztem. Przy pełnym wykorzystaniu koszt krańcowy rośnie stromo.</li>
+      <li><strong>Zapasy i możliwość przechowywania.</strong> Zboże, cukier i węgiel można sprzedać z magazynu. Truskawki, energia elektryczna i miejsca w samolocie po upływie terminu przepadają.</li>
+      <li><strong>Długość cyklu produkcyjnego.</strong> Od decyzji o zwiększeniu stada świń do wzrostu podaży żywca mija mniej więcej rok: ciąża lochy trwa około 114 dni, a tucz kilka miesięcy. Nowy sad zaczyna owocować po kilku latach.</li>
+      <li><strong>Mobilność czynników i specyficzność aktywów.</strong> Ciągnik można przestawić z pszenicy na rzepak, ale kombinatu do produkcji stali nie przestawi się na produkcję leków.</li>
+      <li><strong>Swoboda wejścia.</strong> Bariery prawne, koncesje i wysokie koszty początkowe ograniczają reakcję podaży w długim okresie.</li>
+    </ul>
+    <h3>Trzy okresy Marshalla</h3>
+    <p>Alfred Marshall w „Zasadach ekonomii” z 1890 roku pokazał, że ten sam wzrost popytu ma inne skutki w zależności od horyzontu. W <strong>okresie rynkowym</strong> ilość jest dana i cała zmiana popytu przechodzi w cenę. W <strong>okresie krótkim</strong> firmy zwiększają wykorzystanie istniejących mocy. W <strong>okresie długim</strong> zmienia się liczba firm i zdolności produkcyjne, więc cena wraca blisko poziomu wyjściowego, a ilość rośnie najbardziej.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Wzrost popytu w trzech horyzontach</h3><span>przykład: rynek mieszkań w dużym mieście</span></div>
+    <div class="seg" id="kS"></div>
+    <div class="leg"><span><i class="l5"></i>popyt przed zmianą</span><span><i class="l1"></i>popyt po zmianie</span><span><i class="l2"></i>podaż w wybranym horyzoncie</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="kC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Skutki wzrostu popytu w okresie rynkowym, krótkim i długim"></svg></div>
+    <div class="tw"><table id="kT"></table></div>
+    <p class="exp" id="kO" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="s7" data-nav="7. Dynamika">
+  <div class="col">
+    <div class="part">Część 7</div>
+    <h2>Dynamika podaży: model pajęczyny i model Nerlove’a</h2>
+    <p>W rolnictwie decyzja produkcyjna wyprzedza sprzedaż o cały cykl. Rolnik decyduje o zasiewach jesienią lub wiosną, a sprzedaje po żniwach. Hodowca decyduje o liczbie loch dziś, a tuczniki sprzeda za rok. Podaż w okresie t zależy więc od ceny oczekiwanej w chwili podjęcia decyzji, a nie od ceny bieżącej. Arthur Hanau w 1928 roku opisał w ten sposób wahania cen świń w Niemczech, a Mordecai Ezekiel w 1938 roku sformułował twierdzenie o pajęczynie.</p>
+    <div class="fx">Q<sup>d</sup><sub>t</sub> = a − b·P<sub>t</sub>, &nbsp; Q<sup>s</sup><sub>t</sub> = c + d·P<sup>e</sup><sub>t</sub>, &nbsp; P<sup>e</sup><sub>t</sub> = P<sub>t−1</sub><small>Z równowagi wynika P<sub>t</sub> − P* = −(d/b)·(P<sub>t−1</sub> − P*). Odchylenie od równowagi zmienia znak co okres i jest mnożone przez d/b.</small></div>
+    <p>Twierdzenie o pajęczynie ma trzy przypadki. Gdy d/b &lt; 1, czyli podaż reaguje na cenę słabiej niż popyt, wahania wygasają i rynek zbiega do równowagi. Gdy d/b = 1, wahania mają stałą amplitudę. Gdy d/b &gt; 1, wahania narastają. Na wykresie ceny i ilości ścieżka dostosowania tworzy charakterystyczną pajęczynę.</p>
+    <p>Oczekiwania naiwne są skrajnym założeniem. Marc Nerlove w 1958 roku wprowadził <strong>oczekiwania adaptacyjne</strong>: producent poprawia swoją prognozę o część λ ostatniego błędu, P<sup>e</sup><sub>t</sub> = P<sup>e</sup><sub>t−1</sub> + λ(P<sub>t−1</sub> − P<sup>e</sup><sub>t−1</sub>). Wahania stają się łagodniejsze. John Muth w 1961 roku użył właśnie modelu pajęczyny, by zaproponować <strong>oczekiwania racjonalne</strong>: jeśli producenci znają strukturę rynku, oczekują ceny równowagi i systematyczne cykle znikają.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Pajęczyna na rynku tuczników</h3><span>D: Q = 100 − 10P · S: Q = c + d·P<sup>e</sup></span></div>
+    <div class="seg" id="wS"></div>
+    <div class="row">
+      <label class="sl" for="wD">Reakcja podaży d: <span id="wDv"></span><input id="wD" type="range" min="2" max="14" step="0.5" value="8"></label>
+      <label class="sl" for="wL">Waga korekty λ: <span id="wLv"></span><input id="wL" type="range" min="0.1" max="1" step="0.05" value="0.5"></label>
+      <label class="sl" for="wP">Cena w okresie 0: <span id="wPv"></span><input id="wP" type="range" min="5.5" max="8" step="0.1" value="7"></label>
+    </div>
+    <div class="leg"><span><i class="l1"></i>popyt</span><span><i class="l2"></i>podaż</span><span><i class="l4"></i>ścieżka dostosowania</span><span><i class="l5"></i>cena równowagi</span></div>
+    <div class="two">
+      <div class="tw" style="border:0;background:none"><svg id="wC1" viewBox="0 0 640 360" width="100%" style="min-width:300px" role="img" aria-label="Wykres pajęczyny w układzie ilość cena"></svg></div>
+      <div class="tw" style="border:0;background:none"><svg id="wC2" viewBox="0 0 640 360" width="100%" style="min-width:300px" role="img" aria-label="Cena w kolejnych okresach"></svg></div>
+    </div>
+    <div class="kv" id="wK"></div>
+    <p class="exp" id="wO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <div class="fresh"><h4>Cykl świński w danych</h4><p>Wahania pogłowia i cen trzody chlewnej w Polsce trwają zwykle kilka lat, a więc dłużej niż dwa okresy produkcyjne, które przewiduje najprostsza pajęczyna. Dzieje się tak, ponieważ hodowcy rozbudowują i redukują stada stopniowo, inwestycje w chlewnie są nieodwracalne, a na krajowy rynek wpływają ceny w całej Unii i szoki sanitarne, takie jak afrykański pomór świń. Ekonometryczne modele cykli trzody uwzględniają więc rozłożone opóźnienia i oczekiwania, a nie samą cenę z poprzedniego okresu.</p></div>
+    <h3>Model Nerlove’a: krótki i długi okres w jednym równaniu</h3>
+    <p>Nerlove połączył oczekiwania z mechanizmem częściowego dostosowania. Producenci mają pożądany poziom produkcji Q*<sub>t</sub> = α<sub>0</sub> + α<sub>1</sub>·P<sub>t−1</sub>, ale w każdym okresie zamykają tylko część δ luki między nim a produkcją poprzednią, bo zmiana ma swój koszt. Podstawienie daje równanie, które można oszacować metodą najmniejszych kwadratów.</p>
+    <div class="fx">Q<sub>t</sub> = β<sub>0</sub> + β<sub>1</sub>·P<sub>t−1</sub> + β<sub>2</sub>·Q<sub>t−1</sub> + u<sub>t</sub><small>δ = 1 − β<sub>2</sub> · α<sub>1</sub> = β<sub>1</sub>/(1 − β<sub>2</sub>) · E<sub>s</sub> krótkookresowa = β<sub>1</sub>·P̄/Q̄ · E<sub>s</sub> długookresowa = β<sub>1</sub>/(1 − β<sub>2</sub>) · P̄/Q̄</small></div>
+    <p>Z jednego równania otrzymujemy dwie elastyczności. Krótkookresowa pokazuje reakcję w pierwszym okresie, długookresowa reakcję po pełnym dostosowaniu. Jeśli w modelu zamiast częściowego dostosowania występują oczekiwania adaptacyjne, równanie ma tę samą postać, ale składnik losowy staje się autokorelowany. Wtedy zmienna Q<sub>t−1</sub> jest skorelowana z u<sub>t</sub> i estymator najmniejszych kwadratów jest niezgodny, więc stosuje się zmienne instrumentalne lub metodę największej wiarygodności. To dobry przykład, jak założenie ekonomiczne decyduje o wyborze estymatora.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">Kalkulator modelu Nerlove’a</h3><span>podaż pszenicy, dane dydaktyczne</span></div>
+    <div class="row">
+      <label class="sl" for="nB1">β₁, przy cenie z okresu poprzedniego: <span id="nB1v"></span><input id="nB1" type="range" min="0.001" max="0.01" step="0.0005" value="0.004"></label>
+      <label class="sl" for="nB2">β₂, przy ilości z okresu poprzedniego: <span id="nB2v"></span><input id="nB2" type="range" min="0" max="0.9" step="0.05" value="0.6"></label>
+      <label class="sl" for="nP">Średnia cena P̄: <span id="nPv"></span><input id="nP" type="range" min="500" max="1400" step="50" value="900"></label>
+      <label class="sl" for="nQ">Średnia ilość Q̄: <span id="nQv"></span><input id="nQ" type="range" min="8" max="16" step="0.5" value="12"></label>
+    </div>
+    <div class="kv" id="nK"></div>
+    <h4>Dostosowanie podaży po trwałym wzroście ceny o 10 procent</h4>
+    <div class="tw" style="border:0;background:none"><svg id="nC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Ścieżka dostosowania podaży w kolejnych okresach"></svg></div>
+    <p class="exp" id="nO" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="s8" data-nav="8. Pomiar">
+  <div class="col">
+    <div class="part">Część 8</div>
+    <h2>Pomiar: identyfikacja krzywej podaży</h2>
+    <p>Dane rynkowe to pary ceny i ilości, z których każda jest punktem przecięcia popytu i podaży w danym okresie. Elmer Working w 1927 roku zadał pytanie, co właściwie pokazuje krzywa dopasowana do takich punktów. Jego odpowiedź brzmi: zależy od tego, która krzywa się przesuwa. Jeśli przesuwa się tylko popyt, a podaż stoi w miejscu, punkty równowagi układają się wzdłuż krzywej podaży. Jeśli przesuwa się tylko podaż, punkty wyznaczają krzywą popytu. Jeśli przesuwają się obie, regresja ilości na cenie daje mieszankę obu nachyleń.</p>
+    <div class="fx">S: Q = α<sub>0</sub> + α<sub>1</sub>·P + v &nbsp;&nbsp; D: Q = β<sub>0</sub> − β<sub>1</sub>·P + κ·Z + u<small>v to nieobserwowane szoki podaży, u szoki popytu, Z obserwowana zmienna przesuwająca tylko popyt, na przykład dochód nabywców lub temperatura.</small></div>
+    <p>Cena jest skorelowana z szokiem podaży v, bo każdy szok podaży zmienia cenę równowagi. Regresja metodą najmniejszych kwadratów jest więc obciążona. Granicę oszacowania można policzyć wprost.</p>
+    <div class="fx">plim b<sub>MNK</sub> = α<sub>1</sub> − (α<sub>1</sub> + β<sub>1</sub>) · σ²<sub>v</sub> / (σ²<sub>D</sub> + σ²<sub>v</sub>)<small>σ²<sub>D</sub> to wariancja wszystkich przesunięć popytu, κ²σ²<sub>Z</sub> + σ²<sub>u</sub>. Bez szoków podaży MNK odtwarza krzywą podaży, bez przesunięć popytu odtwarza nachylenie popytu, −β<sub>1</sub>.</small></div>
+    <p>Rozwiązaniem jest <strong>zmienna instrumentalna</strong>. Aby zidentyfikować krzywą podaży, potrzebujemy zmiennej, która przesuwa popyt, a nie wpływa bezpośrednio na podaż. To tak zwany warunek rzędu: w równaniu podaży musi brakować co najmniej jednej zmiennej obecnej w równaniu popytu. Warunek rzędu macierzy wymaga, by ta zmienna rzeczywiście przesuwała popyt, czyli κ ≠ 0. Philip Wright w 1928 roku zastosował tę metodę do rynku olejów roślinnych i masła, zapoczątkowując metodę zmiennych instrumentalnych. Przy jednym instrumencie estymator ma prostą postać.</p>
+    <div class="fx">α̂<sub>1</sub><sup>IV</sup> = Cov(Q, Z) / Cov(P, Z)<small>W ogólnym przypadku stosuje się dwustopniową metodę najmniejszych kwadratów: w pierwszym etapie regresja P na instrumentach, w drugim regresja Q na wartościach dopasowanych P̂.</small></div>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><h3 style="margin:0">MNK czy zmienna instrumentalna?</h3><span>prawdziwe α₁ = 8 · β₁ = 10</span></div>
+    <div class="row">
+      <label class="sl" for="iK">Siła instrumentu κ: <span id="iKv"></span><input id="iK" type="range" min="0" max="15" step="0.5" value="8"></label>
+      <label class="sl" for="iU">Szoki popytu σ<sub>u</sub>: <span id="iUv"></span><input id="iU" type="range" min="0" max="12" step="0.5" value="4"></label>
+      <label class="sl" for="iV">Szoki podaży σ<sub>v</sub>: <span id="iVv"></span><input id="iV" type="range" min="0" max="12" step="0.5" value="8"></label>
+      <label class="sl" for="iN">Liczba obserwacji n: <span id="iNv"></span><input id="iN" type="range" min="30" max="500" step="10" value="150"></label>
+      <button class="btn" id="iG" type="button">Nowa próba</button>
+    </div>
+    <div class="leg"><span><i class="sq" style="background:var(--accent-text);opacity:.45"></i>punkty równowagi</span><span><i class="l2"></i>prawdziwa podaż</span><span><i class="l5"></i>popyt przy Z = 0</span><span><i class="l4"></i>regresja MNK</span><span><i class="l6"></i>estymator IV</span></div>
+    <div class="tw" style="border:0;background:none"><svg id="iC" viewBox="0 0 640 360" width="100%" style="min-width:480px" role="img" aria-label="Punkty równowagi i oszacowane krzywe podaży"></svg></div>
+    <div class="tw"><table id="iT"></table></div>
+    <p class="exp" id="iO" aria-live="polite"></p>
+  </div>
+  <div class="col">
+    <h3>Dalsze kroki w modelowaniu podaży</h3>
+    <ul>
+      <li><strong>Słabe instrumenty.</strong> Gdy instrument słabo przesuwa popyt, estymator IV ma duży rozrzut i jest obciążony w stronę MNK. Douglas Staiger i James Stock w 1997 roku zaproponowali regułę praktyczną, by statystyka F z pierwszego etapu przekraczała 10.</li>
+      <li><strong>Systemy równań.</strong> Popyt i podaż szacuje się łącznie, na przykład trójstopniową metodą najmniejszych kwadratów, która wykorzystuje korelację składników losowych obu równań.</li>
+      <li><strong>Modele VAR z restrykcjami znaku.</strong> Szok podaży przesuwa cenę i ilość w przeciwnych kierunkach, a szok popytu w tym samym. Lutz Kilian w 2009 roku wykorzystał tę logikę, by oddzielić szoki podaży ropy od szoków popytu na rynku światowym.</li>
+      <li><strong>Funkcje zysku i kosztu.</strong> Zamiast szacować podaż bezpośrednio, szacuje się elastyczną funkcję zysku, na przykład translogarytmiczną, a podaż i popyt na czynniki otrzymuje się z lematu Hotellinga. Teoria narzuca ograniczenia: jednorodność, symetrię i wypukłość.</li>
+      <li><strong>Źródła danych.</strong> Dla rolnictwa: GUS, Zintegrowany System Rolniczej Informacji Rynkowej prowadzony przez ministerstwo rolnictwa, analizy IERiGŻ, Eurostat i FAOSTAT. Dla energetyki: Towarowa Giełda Energii, dane Polskich Sieci Elektroenergetycznych oraz platforma przejrzystości ENTSO-E z danymi godzinowymi o produkcji według technologii.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="s9" data-nav="Podsumowanie">
+  <div class="col">
+    <div class="part">Podsumowanie</div>
+    <h2>Najważniejsze tezy</h2>
+    <ol>
+      <li>Podaż to zależność między ceną a ilością, którą producenci chcą i mogą sprzedać w danym okresie, przy stałych pozostałych warunkach. Zmiana ceny to ruch wzdłuż krzywej, zmiana każdej innej determinanty przesuwa krzywą.</li>
+      <li>Prawo podaży wynika z rosnącego kosztu krańcowego, zróżnicowania kosztów producentów i przesuwania zasobów między zastosowaniami.</li>
+      <li>Krótkookresowa krzywa podaży firmy w konkurencji doskonałej to rosnąca część krzywej kosztu krańcowego powyżej minimum przeciętnego kosztu zmiennego.</li>
+      <li>Podaż rynkowa to suma pozioma podaży firm. Na rynku energii przyjmuje postać kolejki zasługowej, a cenę wyznacza koszt krańcowy ostatniej potrzebnej jednostki.</li>
+      <li>Determinanty pozacenowe to ceny czynników, technologia, ceny dóbr konkurencyjnych i łącznych w produkcji, liczba producentów, oczekiwania, podatki, dotacje, regulacje, warunki naturalne i koszt kapitału.</li>
+      <li>Podatek kwotowy przesuwa krzywą podaży równolegle, podatek ad valorem ją obraca, dotacja przesuwa ją w dół.</li>
+      <li>Monopolista nie ma krzywej podaży, bo jego decyzja zależy od elastyczności popytu.</li>
+      <li>Elastyczność podaży rośnie wraz z horyzontem czasowym. Dla podaży liniowej o elastyczności decyduje miejsce przecięcia osi.</li>
+      <li>Opóźnienie produkcyjne połączone z oczekiwaniami naiwnymi prowadzi do cykli opisanych modelem pajęczyny. Model Nerlove’a pozwala oszacować reakcję krótko- i długookresową.</li>
+      <li>Aby oszacować krzywą podaży, potrzebna jest zmienna przesuwająca tylko popyt, czyli instrument. Bez niej regresja ilości na cenie miesza nachylenia popytu i podaży.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="riddles" data-nav="Zagadki">
+  <div class="col">
+    <div class="part">Do przemyślenia</div>
+    <h2>Zagadki</h2>
+  </div>
+  <div class="grid" id="riddleList" style="grid-template-columns:repeat(auto-fit,minmax(290px,1fr))"></div>
+</section>
+
+<section id="quiz" data-nav="Test">
+  <div class="col">
+    <div class="part">Sprawdzian</div>
+    <h2>Test: 10 pytań</h2>
+    <p>Jedna odpowiedź poprawna. Wyjaśnienie pojawia się po wyborze.</p>
+  </div>
+  <div class="lab">
+    <div class="lab-h"><span class="score" id="qScore">Wynik: 0 / 10</span><button class="btn ghost" id="qReset" type="button">Zacznij od nowa</button></div>
+    <div id="quizList" class="stack"></div>
+    <div class="out" id="qFinal" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="lit" data-nav="Literatura">
+  <div class="col">
+    <div class="part">Według karty przedmiotu</div>
+    <h2>Literatura</h2>
+    <h3>Obowiązkowa</h3>
+    <ol class="lit">
+      <li>Begg, D., Vernasca, G., Fisher, S., Dornbusch, R. (2014). Mikroekonomia. PWE, Warszawa.</li>
+      <li>Samuelson, P. A., Nordhaus, W. D. (2019). Ekonomia. Rebis, Warszawa.</li>
+      <li>Nasiłowski, M. (2016). System rynkowy. Podstawy mikro- i makroekonomii. Red. nauk. M. Garbicz. Wydawnictwo Key Text, Warszawa.</li>
+    </ol>
+    <h3>Dodatkowa</h3>
+    <ol class="lit">
+      <li>Varian, H. (2013). Mikroekonomia. Kurs średni. Ujęcie nowoczesne. Wydawnictwo Naukowe PWN, Warszawa.</li>
+      <li>Zawojska, A., Daniłowska, A. (2012). Zbiór zadań z ekonomii z rozwiązaniami. Wydawnictwo SGGW, Warszawa.</li>
+    </ol>
+  </div>
+  <footer>Mikroekonomia, wykład pogłębiony: podaż i jej determinanty. Kierunek informatyka i ekonometria, Wydział Zastosowań Informatyki i Matematyki SGGW. Koordynator przedmiotu: Alina Daniłowska. Opracowanie wykładu: dr Arkadiusz Weremczuk. Dane na wykresach są dydaktyczne.</footer>
+</section>
+
+</main>
+
+
+<div class="lk" id="lk" role="region" aria-label="Lektor">
+  <button type="button" class="main" id="lkPlay" aria-label="Odtwarzaj"></button>
+  <div class="info"><b>Lektor</b><span id="lkNow">Odsłuchaj wykład</span></div>
+  <button type="button" id="lkPrev" aria-label="Poprzednia część"></button>
+  <button type="button" id="lkNext" aria-label="Następna część"></button>
+  <button type="button" id="lkStop" aria-label="Zatrzymaj"></button>
+  <button type="button" id="lkSet" aria-label="Ustawienia lektora" aria-expanded="false"></button>
+  <div class="lk-pop" id="lkPop" hidden>
+    <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="1.5" step="0.05" value="1"></label>
+        <label class="chk"><input type="checkbox" id="lkAuto" checked> Czytaj kolejne części automatycznie</label>
+  </div>
+</div>
+<audio id="lkAudio" preload="none"></audio>
+<script>
+(function(){
+var $=function(s,r){return (r||document).querySelector(s)};
+var el=function(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+function f(x,d){if(d==null)d=2;var s=Math.abs(x).toFixed(d).split('.');s[0]=s[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');var r=s.join(',');return (x<0&&+r.replace(/[ ,]/g,'')!==0?'−':'')+r}
+function sg(x,d){return (x>0?'+':'')+f(x,d)}
+function segs(id,labels,get,set,draw){var box=$('#'+id);labels.forEach(function(l,i){var b=el('button','',l);b.type='button';b.addEventListener('click',function(){set(i);draw()});box.appendChild(b)});
+  return function(){[].forEach.call(box.children,function(b,i){b.classList.toggle('on',i===get())})}}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){var u=0;while(u===0)u=r();var v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function Phi(z){var t=1/(1+0.2316419*Math.abs(z)),d=0.3989423*Math.exp(-z*z/2),p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p}
+function phi(z){return 0.3989423*Math.exp(-z*z/2)}
+function on(ids,fn){ids.forEach(function(i){$('#'+i).addEventListener('input',fn)});fn()}
+
+/* nawigacja */
+var nav=$('#nav'),secs=[].slice.call(document.querySelectorAll('section[data-nav]')),nbs=[];
+secs.forEach(function(s){var b=el('button','',s.getAttribute('data-nav'));b.type='button';
+  b.addEventListener('click',function(){s.scrollIntoView({behavior:'smooth',block:'start'})});nav.appendChild(b);nbs.push(b)});
+function onScroll(){var h=document.documentElement,max=h.scrollHeight-h.clientHeight;
+  $('#bar').style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  var cur=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<140)cur=i});
+  nbs.forEach(function(b,i){b.classList.toggle('on',i===cur)});}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* wykresy: wspólna skala */
+function plot(id,o){var x0=o.x0||0,y0=o.y0||0,W=640,H=360,L=62,R=24,T=20,B=48,X=function(v){return L+(W-L-R)*(v-x0)/(o.xm-x0)},Y=function(v){return T+(H-T-B)*(1-(v-y0)/(o.ym-y0))},h='',nx=o.nx||4,ny=o.ny||4;
+  var inX=function(v){return v>=x0-1e-9&&v<=o.xm+1e-9},inY=function(v){return v>=y0-1e-9&&v<=o.ym+1e-9},cy=function(v){return Math.max(y0,Math.min(o.ym,v))};
+  for(var i=0;i<=ny;i++){var yv=y0+(o.ym-y0)*i/ny;h+='<line class="cg" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(yv)+'" y2="'+Y(yv)+'"/><text class="ct" x="'+(L-8)+'" y="'+(Y(yv)+4)+'" text-anchor="end">'+f(yv,o.yd||0)+(o.ys||'')+'</text>'}
+  for(i=0;i<=nx;i++){var xv=x0+(o.xm-x0)*i/nx;h+='<text class="ct" x="'+X(xv)+'" y="'+(H-B+18)+'" text-anchor="middle">'+f(xv,o.xd||0)+'</text>'}
+  (o.bars||[]).forEach(function(b){var ya=cy(b[3]==null?Math.max(y0,0):b[3]),yb=cy(b[2]);h+='<rect class="'+b[4]+'" x="'+X(b[0]).toFixed(1)+'" width="'+(X(b[1])-X(b[0])).toFixed(1)+'" y="'+Y(Math.max(ya,yb)).toFixed(1)+'" height="'+Math.abs(Y(ya)-Y(yb)).toFixed(1)+'"/>'});
+  (o.poly||[]).forEach(function(p){h+='<polygon class="'+p[0]+'" points="'+p[1].map(function(q){return X(q[0]).toFixed(1)+','+Y(cy(q[1])).toFixed(1)}).join(' ')+'"/>'});
+  if(y0<0)h+='<line class="cx" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(0)+'" y2="'+Y(0)+'"/>';
+  if(x0<0)h+='<line class="cx" x1="'+X(0)+'" x2="'+X(0)+'" y1="'+T+'" y2="'+(H-B)+'"/>';
+  h+='<line class="cx" x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+(H-B)+'"/><line class="cx" x1="'+L+'" x2="'+(W-R)+'" y1="'+(H-B)+'" y2="'+(H-B)+'"/>';
+  h+='<text class="ct" x="'+(L+(W-L-R)/2)+'" y="'+(H-8)+'" text-anchor="middle">'+o.xl+'</text><text class="ct" x="'+L+'" y="12">'+o.yl+'</text>';
+  (o.dots||[]).forEach(function(d){if(inX(d[0])&&inY(d[1]))h+='<circle class="'+(d[2]||'dt')+'" cx="'+X(d[0]).toFixed(1)+'" cy="'+Y(d[1]).toFixed(1)+'" r="2.8"/>'});
+  (o.lines||[]).forEach(function(l){var d='',pen=false;for(var k=0;k<=240;k++){var x=l.a+(l.b-l.a)*k/240,y=l.fn(x);
+      if(!inY(y)||!inX(x)||isNaN(y)||!isFinite(y)){pen=false;continue}d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true}
+    h+='<path class="'+l.c+'" d="'+d+'"/>';
+    if(l.t)h+='<text class="cl '+(l.tc||'')+'" x="'+(X(l.at)+(l.dx||8))+'" y="'+(Y(l.fn(l.at))+(l.dy||-10))+'" text-anchor="'+(l.an||'start')+'">'+l.t+'</text>'});
+  (o.segs||[]).forEach(function(s){h+='<line class="'+s[4]+'" x1="'+X(s[0])+'" y1="'+Y(s[1])+'" x2="'+X(s[2])+'" y2="'+Y(s[3])+'"/>'});
+  (o.path||[]).forEach(function(pp){var d='',pen=false;pp[1].forEach(function(q){if(!inX(q[0])||!inY(q[1])){pen=false;return}d+=(pen?'L':'M')+X(q[0]).toFixed(1)+' '+Y(q[1]).toFixed(1);pen=true});h+='<path class="'+pp[0]+'" d="'+d+'"/>'});
+  (o.hl||[]).forEach(function(v){if(!inY(v[0]))return;h+='<line class="c3" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v[0])+'" y2="'+Y(v[0])+'"/><text class="ct" x="'+(W-R-4)+'" y="'+(Y(v[0])-6)+'" text-anchor="end">'+v[1]+'</text>'});
+  (o.vl||[]).forEach(function(v){if(!inX(v[0]))return;h+='<line class="c3" x1="'+X(v[0])+'" x2="'+X(v[0])+'" y1="'+T+'" y2="'+(H-B)+'"/><text class="ct" x="'+(X(v[0])+(v[2]==='l'?-4:4))+'" y="'+(T+12)+'" text-anchor="'+(v[2]==='l'?'end':'start')+'">'+v[1]+'</text>'});
+  (o.txt||[]).forEach(function(t){h+='<text class="cl '+(t[3]||'')+'" x="'+X(t[0])+'" y="'+Y(t[1])+'" text-anchor="'+(t[4]||'middle')+'">'+t[2]+'</text>'});
+  (o.pts||[]).forEach(function(p){if(!inX(p[0])||!inY(p[1]))return;h+='<circle class="cd" cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(p[4]||6)+'"/>';
+    if(p[2]){var m=p[3]||'ur',lf=m==='ul'||m==='dl';h+='<text class="cl" x="'+(X(p[0])+(lf?-12:14))+'" y="'+(Y(p[1])+(m==='r'?5:(m==='dl'||m==='dr'?22:-12)))+'" text-anchor="'+(lf?'end':'start')+'">'+p[2]+'</text>'}});
+  $('#'+id).innerHTML=h;}
+
+function nice(x){if(!(x>0))return 1;var e=Math.pow(10,Math.floor(Math.log(x)/Math.LN10)),m=x/e;return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*e}
+function axisOf(xm){var e=Math.pow(10,Math.floor(Math.log(xm)/Math.LN10+1e-9)),m=Math.round(xm/e*10)/10,nx=(m===2)?4:5,st=xm/nx,d=Math.abs(st-Math.round(st))<1e-9?0:(Math.abs(st*10-Math.round(st*10))<1e-9?1:2);return {nx:nx,d:d}}
+function mean(a){return a.reduce(function(s,v){return s+v},0)/a.length}
+function cov(a,b){var ma=mean(a),mb=mean(b),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-ma)*(b[i]-mb);return s/a.length}
+
+/* 1. podaż jabłek i nadwyżka producenta */
+function labA(){var P=+$('#aP').value;$('#aPv').textContent=f(P,2)+' zł/kg';
+  var Q=Math.max(0,40*P-20),PS=0.5*Q*(P-0.5),R=P*Q,VC=R-PS;
+  plot('aC',{xm:140,ym:4,nx:7,ny:4,yd:0,xl:'ilość, tys. t miesięcznie',yl:'cena, zł/kg',
+    poly:Q>0?[['a2',[[0,0],[0,0.5],[Q,P],[Q,0]]],['a1',[[0,0.5],[0,P],[Q,P]]]]:[],
+    lines:[{fn:function(q){return 0.5+q/40},a:0,b:140,c:'c2',t:'S',tc:'t2',at:128,dx:6,dy:-10}],
+    hl:[[P,'P = '+f(P,2)+' zł/kg']],segs:Q>0?[[Q,0,Q,P,'c3']]:[],pts:[[Q,P,'Q = '+f(Q,0),'dr']]});
+  $('#aK').innerHTML='<span>Wielkość podaży Q<sub>s</sub></span><b>'+f(Q,1)+' tys. t</b><span>Przychód P·Q</span><b>'+f(R,1)+' mln zł</b><span>Koszty zmienne (pole pod S)</span><b>'+f(VC,1)+' mln zł</b><span>Nadwyżka producenta</span><b>'+f(PS,1)+' mln zł</b><span>Elastyczność podaży w punkcie</span><b>'+(Q>0?f(40*P/Q,2):'—')+'</b>';}
+on(['aP'],labA);
+
+/* 2a. podaż firmy z kosztów */
+function MCf(q){return 10-2.4*q+0.18*q*q}function AVCf(q){return 10-1.2*q+0.06*q*q}
+function labF(){var P=+$('#fP').value,FC=+$('#fF').value;$('#fPv').textContent=f(P,2)+' zł/szt.';$('#fFv').textContent=f(FC,0)+' tys. zł';
+  var ATC=function(q){return FC/q+AVCf(q)},qm=10,am=4;
+  if(FC>0){am=1e9;for(var q=2;q<=20;q+=0.005){var v=ATC(q);if(v<am){am=v;qm=q}}}
+  var qs=P>=4?(2.4+Math.sqrt(5.76-0.72*(10-P)))/0.36:0,R=P*qs,TC=FC+qs*AVCf(qs),pr=R-TC;
+  var sp=[];for(var p=4;p<=20.001;p+=0.25)sp.push([(2.4+Math.sqrt(5.76-0.72*(10-p)))/0.36,p]);
+  var o={xm:20,ym:20,nx:4,ny:4,xl:'produkcja q, tys. szt. tygodniowo',yl:'zł za sztukę',
+    bars:qs>0?[[0,qs,P,ATC(qs),pr>=0?'a1':'a4']]:[],
+    path:[['cS',sp]],segs:[[0,0,0,4,'cS'],[0,4,10,4,'c3']],
+    lines:[{fn:MCf,a:0.2,b:20,c:'c1',t:'MC',tc:'t1',at:16,dx:8,dy:4},{fn:AVCf,a:0.2,b:20,c:'c2',t:'AVC',tc:'t2',at:18.6,dx:-6,dy:16,an:'end'}],
+    hl:[[P,'P = '+f(P,2)]],pts:qs>0?[[qs,P,'q* = '+f(qs,1),'ul']]:[[0,P,'q* = 0','r']]};
+  if(FC>0)o.lines.push({fn:ATC,a:1,b:20,c:'c6',t:'ATC',tc:'t6',at:19,dx:-6,dy:-8,an:'end'});
+  plot('fC',o);
+  $('#fK').innerHTML='<span>Próg zamknięcia: min AVC</span><b>4,00 zł przy q = 10,0</b><span>Próg rentowności: min ATC</span><b>'+f(am,2)+' zł przy q = '+f(qm,1)+'</b><span>Produkcja q*</span><b>'+f(qs,2)+' tys. szt.</b><span>Przychód</span><b>'+f(R,1)+' tys. zł</b><span>Koszt całkowity</span><b>'+f(TC,1)+' tys. zł</b><span>Zysk ekonomiczny</span><b>'+sg(pr,1)+' tys. zł</b>';
+  $('#fO').textContent=P<4?'Cena jest niższa od minimum przeciętnego kosztu zmiennego (4 zł). Firma wstrzymuje produkcję, bo każda wytworzona sztuka powiększyłaby stratę. Traci tylko koszty stałe: '+f(FC,0)+' tys. zł. Na tym odcinku krzywa podaży firmy pokrywa się z osią ceny.':
+    (P<am-1e-9?'Cena mieści się między progiem zamknięcia a progiem rentowności. Firma produkuje '+f(qs,1)+' tys. szt. ze stratą '+f(-pr,1)+' tys. zł, ale gdyby stanęła, straciłaby całe koszty stałe, czyli '+f(FC,0)+' tys. zł. Przychód pokrywa koszty zmienne i część stałych.':
+    'Cena przekracza minimum przeciętnego kosztu całkowitego. Firma osiąga zysk ekonomiczny '+f(pr,1)+' tys. zł. W długim okresie taki zysk przyciągnie do gałęzi nowe firmy, a podaż rynkowa przesunie się w prawo.')+' Zmiana kosztów stałych nie zmienia produkcji, tylko wynik: krzywa podaży w krótkim okresie zależy wyłącznie od kosztów zmiennych.';}
+on(['fP','fF'],labF);
+
+/* 2b. kolejka zasługowa */
+var MSC=[['Typowy dzień',{mD:21,mW:4,mV:3,mG:200,mK:250,mE:320}],['Słoneczne południe',{mD:15.5,mW:4,mV:12,mG:200,mK:250,mE:320}],['Bezwietrzny wieczór zimą',{mD:25,mW:0.5,mV:0,mG:200,mK:250,mE:320}],['Kryzys paliwowy 2022',{mD:23,mW:3,mV:4,mG:600,mK:600,mE:380}],['Wysoka cena CO₂',{mD:21,mW:4,mV:3,mG:200,mK:250,mE:650}]],mSc=0;
+var mSeg=segs('mS',MSC.map(function(s){return s[0]}),function(){return mSc},function(i){mSc=i;var p=MSC[i][1];for(var k in p)$('#'+k).value=p[k]},function(){labM()});
+function labM(){var D=+$('#mD').value,W=+$('#mW').value,V=+$('#mV').value,G=+$('#mG').value,K=+$('#mK').value,E=+$('#mE').value;mSeg();
+  $('#mDv').textContent=f(D,1)+' GW';$('#mWv').textContent=f(W,1)+' GW';$('#mVv').textContent=f(V,1)+' GW';$('#mGv').textContent=f(G,0)+' zł/MWh';$('#mKv').textContent=f(K,0)+' zł/MWh';$('#mEv').textContent=f(E,0)+' zł/t';
+  var T=[{k:'pv',n:'Fotowoltaika',c:V,m:2,e:0,oze:1},{k:'w',n:'Wiatr',c:W,m:5,e:0,oze:1},{k:'bio',n:'Biomasa',c:1,m:380,e:0,oze:1},{k:'lig',n:'Węgiel brunatny',c:6,m:90+1.1*E,e:1.1},
+    {k:'coal',n:'Węgiel kamienny',c:10,m:K+0.9*E,e:0.9},{k:'ccgt',n:'Gaz, cykl kombinowany',c:4,m:G/0.55+0.37*E,e:0.37},{k:'ocgt',n:'Gaz, turbiny szczytowe',c:2,m:G/0.38+0.55*E,e:0.55},{k:'imp',n:'Import i rezerwy',c:2,m:1800,e:0}];
+  T.sort(function(a,b){return a.m-b.m});var cum=0,price=null,mg=null,tot=0;T.forEach(function(t){t.x0=cum;cum+=t.c;t.x1=cum;tot=cum});
+  T.forEach(function(t){t.g=Math.max(0,Math.min(t.c,D-t.x0));if(price===null&&t.c>0&&t.x1>=D-1e-9){price=t.m;mg=t}});
+  var short=price===null;if(short)price=2000;
+  var xm=Math.max(30,Math.ceil(tot/6)*6),bars=[],txt=[];
+  T.forEach(function(t){if(t.c<=0)return;bars.push([t.x0+0.06,t.x1-0.06,t.m,0,'mo-'+t.k])});
+  var low=T.filter(function(t){return t.m<50&&t.c>0});if(low.length){var lx=(low[0].x0+low[low.length-1].x1)/2;txt.push([lx,110,'OZE ≈ 0 zł','t3'])}
+  txt.push([0.4,Math.min(1840,price+55),(short?'limit ceny: ':'cena rozliczeniowa: ')+f(price,0)+' zł/MWh','t1','start']);
+  txt.push([D>xm*0.6?D-0.3:D+0.3,1930,'zapotrzebowanie '+f(D,1)+' GW','t1',D>xm*0.6?'end':'start']);
+  plot('mC',{xm:xm,ym:2000,nx:xm/6,ny:4,xl:'moc skumulowana, GW',yl:'koszt krańcowy, zł/MWh',bars:bars,txt:txt,
+    segs:[[D,0,D,1880,'c1']],hl:[[price,'']]});
+  var em=0,ren=0,oze=0;T.forEach(function(t){em+=t.g*t.e;if(t.oze)oze+=t.g;if(t.g>0)ren+=(price-t.m)*t.g/1000});
+  var rows='<tr><th>Technologia (w kolejności kosztu)</th><th class="num">Moc dostępna, GW</th><th class="num">Koszt krańcowy, zł/MWh</th><th class="num">Praca, GW</th><th class="num">Renta, mln zł/h</th></tr>';
+  T.forEach(function(t){var cls=t===mg?' class="mg"':(t.g<=0?' class="off"':'');rows+='<tr'+cls+'><td>'+t.n+(t===mg?' · wyznacza cenę':'')+'</td><td class="num">'+f(t.c,1)+'</td><td class="num">'+f(t.m,0)+'</td><td class="num">'+f(t.g,1)+'</td><td class="num">'+(t.g>0?f((price-t.m)*t.g/1000,2):'—')+'</td></tr>'});
+  $('#mT').innerHTML=rows;
+  $('#mK2').innerHTML='<span>Cena rozliczeniowa</span><b>'+f(price,0)+' zł/MWh</b><span>Jednostka krańcowa</span><b>'+(short?'brak mocy':mg.n)+'</b><span>Udział OZE w pokryciu zapotrzebowania</span><b>'+f(oze/D*100,1)+'%</b><span>Emisja CO₂</span><b>'+f(em,1)+' tys. t/h</b><span>Renty inframarginalne łącznie</span><b>'+f(ren,2)+' mln zł/h</b>';
+  var iL=-1,iG=-1;T.forEach(function(t,i){if(t.k==='lig')iL=i;if(t.k==='ccgt')iG=i});var sw=iG<iL;
+  var msg=short?'Dostępna moc nie pokrywa zapotrzebowania. Operator sięga po rezerwy i ograniczenie poboru, a cena dochodzi do limitu. Tak wygląda podaż doskonale nieelastyczna: na końcu kolejki krzywa staje się pionowa.':
+    (mg.oze&&mg.m<50?'Wiatr i słońce pokrywają całe zapotrzebowanie, więc cenę wyznacza źródło o koszcie bliskim zera. To efekt kanibalizacji: im więcej mocy słonecznej, tym taniej sprzedaje się energia właśnie w godzinach jej pracy.':
+    'Cenę wyznacza '+mg.n.toLowerCase()+' z kosztem krańcowym '+f(mg.m,0)+' zł/MWh. Wszystkie tańsze źródła dostają tę samą cenę, a różnica to ich renta inframarginalna, łącznie '+f(ren,2)+' mln zł w ciągu godziny.');
+  if(!short&&sw)msg+=' Gaz w cyklu kombinowanym wyprzedza w kolejce węgiel brunatny: przy cenie CO₂ '+f(E,0)+' zł/t koszt emisji z węgla przeważa nad tańszym paliwem. To przełączenie paliw.';
+  $('#mO').textContent=msg;}
+['mD','mW','mV','mG','mK','mE'].forEach(function(id){$('#'+id).addEventListener('input',function(){mSc=-1;labM()})});labM();
+
+/* 3. kształty krzywej podaży */
+var SH=[
+ {n:'Typowa',t:'Rosnąca i wypukła',o:{xm:100,ym:10,lines:[{fn:function(q){return 1+q/20+q*q/2500},a:0,b:100,c:'c2',t:'S',tc:'t2',at:92,dx:-16,dy:0}]},
+  m:'Koszt krańcowy rośnie coraz szybciej w miarę zbliżania się do granicy zdolności produkcyjnych. Przy niskiej produkcji podaż jest elastyczna, przy wysokiej coraz mniej.',x:'Większość produkcji przemysłowej i rolnej w krótkim okresie: przetwórnia owoców w szczycie sezonu, rafineria pracująca blisko pełnych mocy.',e:'0 < Eₛ < ∞, maleje wraz z ilością',pc:'ok'},
+ {n:'Pionowa',t:'Doskonale nieelastyczna',o:{xm:100,ym:10,segs:[[50,0,50,10,'c2']],txt:[[53,9.2,'S','t2','start']]},
+  m:'Ilość jest stała niezależnie od ceny. Albo dobra nie da się wytworzyć ponownie, albo horyzont jest tak krótki, że nie ma czasu na reakcję.',x:'Obrazy Jacka Malczewskiego, miejsca na stadionie podczas finału, działki w ścisłym centrum miasta w ujęciu fizycznym, świeże ryby na targu pod koniec dnia.',e:'Eₛ = 0',pc:'bad'},
+ {n:'Pozioma',t:'Doskonale elastyczna',o:{xm:100,ym:10,lines:[{fn:function(){return 5},a:0,b:100,c:'c2',t:'S',tc:'t2',at:90,dx:0,dy:-10}]},
+  m:'Przy danej cenie producenci dostarczą dowolną ilość, a przy niższej żadnej. Tak wygląda długookresowa podaż gałęzi o stałych kosztach oraz podaż importowa dla małego kraju, który nie wpływa na cenę światową.',x:'Usługi fryzjerskie w dużym mieście w długim okresie, import kawy do Polski po cenie z rynku światowego.',e:'Eₛ → ∞',pc:'ok'},
+ {n:'Wygięta wstecz',t:'Podaż pracy',o:{xm:60,ym:100,xl:'godziny pracy w tygodniu',yl:'płaca, zł za godzinę',path:[['c2',(function(){var a=[];for(var w=2;w<=100;w+=2)a.push([0.7*(2.2*w-0.017*w*w),w]);return a})()]],txt:[[38,92,'S','t2','start']]},
+  m:'Wzrost płacy ma dwa skutki. Efekt substytucyjny zachęca do pracy, bo godzina wolnego staje się droższa. Efekt dochodowy zachęca do odpoczynku, bo przy wyższym dochodzie stać nas na więcej wolnego czasu. Powyżej pewnej płacy przeważa efekt dochodowy i liczba oferowanych godzin maleje.',x:'Lekarze i informatycy, którzy przy wysokich stawkach skracają tydzień pracy; rolnicy w gospodarkach rozwijających się, którzy dążą do określonego dochodu docelowego.',e:'Eₛ < 0 na górnym odcinku',pc:'mid'},
+ {n:'Opadająca w długim okresie',t:'Gałąź o malejących kosztach',o:{xm:100,ym:10,lines:[{fn:function(q){return 8-0.05*q},a:0,b:100,c:'c2',t:'LRS',tc:'t2',at:88,dx:0,dy:-12}]},
+  m:'Każda firma nadal ma rosnący koszt krańcowy, ale rozwój całej gałęzi obniża koszty wszystkich: pojawiają się wyspecjalizowani dostawcy, rośnie rynek wykwalifikowanej pracy, działa uczenie się przez praktykę. Długookresowa podaż gałęzi opada.',x:'Moduły fotowoltaiczne, baterie litowo-jonowe, ekrany LCD, sekwencjonowanie genomu.',e:'Eₛ < 0 w długim okresie',pc:'mid'},
+ {n:'Sprzedaż przymusowa',t:'Odcinek opadający przy niskich cenach',o:{xm:100,ym:10,path:[['c2',(function(){var a=[];for(var p=1;p<=10;p+=0.25)a.push([p<4?70-8*p:38+8*(p-4),p]);return a})()]],txt:[[88,9.6,'S','t2','start']]},
+  m:'Zadłużony producent, któremu spada cena, musi sprzedać więcej, aby obsłużyć raty i pokryć wydatki. Przy niskich cenach wielkość podaży rośnie, gdy cena spada. Powyżej progu działa zwykłe prawo podaży.',x:'Rolnicy z wysokimi ratami kredytu w okresie dekoniunktury; inwestorzy giełdowi, którzy po wezwaniu do uzupełnienia depozytu muszą sprzedawać akcje mimo spadających kursów.',e:'Eₛ < 0 na dolnym odcinku',pc:'bad'}];
+var hI=0,hSeg=segs('hS',SH.map(function(s){return s.n}),function(){return hI},function(i){hI=i},function(){labH()});
+function labH(){hSeg();var s=SH[hI],o={};for(var k in s.o)o[k]=s.o[k];o.nx=o.nx||5;o.ny=o.ny||5;o.xl=o.xl||'ilość';o.yl=o.yl||'cena';plot('hC',o);
+  $('#hD').innerHTML='<div class="who">'+s.t+'</div><h4>Skąd ten kształt</h4><p>'+s.m+'</p><h4>Przykłady</h4><p>'+s.x+'</p><div><span class="pill '+s.pc+'">'+s.e+'</span></div>'}
+labH();
+
+/* 4a. podaż z funkcji Cobba-Douglasa */
+function cdq(p,a,w,A){return Math.pow(A,1/(1-a))*Math.pow(a*p/w,a/(1-a))}
+function labC(){var a=+$('#cA').value,w=+$('#cW').value,A=+$('#cT').value;$('#cAv').textContent=f(a,2);$('#cWv').textContent=f(w,1);$('#cTv').textContent=f(A,2);
+  var mx=Math.max(cdq(40,a,w,A),cdq(40,a,10,1)),xm=nice(mx*1.02),ax=axisOf(xm),p0=[],p1=[];
+  for(var p=0;p<=40.001;p+=0.5){p0.push([cdq(p,a,10,1),p]);p1.push([cdq(p,a,w,A),p])}
+  var q0=cdq(20,a,10,1),q1=cdq(20,a,w,A);
+  plot('cC',{xm:xm,ym:40,nx:ax.nx,ny:4,xd:ax.d,xl:'wielkość podaży q',yl:'cena produktu p',path:[['c5',p0],['c1',p1]],hl:[[20,'p = 20']],pts:[[q1,20,'q = '+f(q1,q1<10?2:1),'dr']]});
+  var ep=a/(1-a),eT=1/(1-a);
+  $('#cK').innerHTML='<span>Elastyczność cenowa podaży</span><b>'+f(ep,2)+'</b><span>Elastyczność względem ceny czynnika</span><b>'+f(-ep,2)+'</b><span>Elastyczność względem technologii</span><b>'+f(eT,2)+'</b><span>Podaż przy p = 20: bazowa → obecna</span><b>'+f(q0,2)+' → '+f(q1,2)+'</b><span>Zmiana podaży przy tej cenie</span><b>'+sg((q1/q0-1)*100,1)+'%</b>';
+  $('#cO').textContent='Przy α = '+f(a,2)+' wzrost ceny produktu o 1% zwiększa podaż o '+f(ep,2)+'%, a wzrost ceny czynnika o 1% zmniejsza ją o tyle samo. '+(ep>1?'Przychody krańcowe maleją powoli, więc podaż jest elastyczna.':(ep<1?'Przychody krańcowe maleją szybko, więc podaż jest nieelastyczna.':'Podaż jest proporcjonalna.'))+' Postęp technologiczny działa najsilniej: 1% wzrostu A to '+f(eT,2)+'% więcej produktu przy każdej cenie.';}
+on(['cA','cW','cT'],labC);
+
+/* 4b. podatki i dotacje */
+var tI=0,tSeg=segs('tS',['Podatek kwotowy','Podatek ad valorem','Dotacja kwotowa'],function(){return tI},function(i){tI=i},function(){labT()});
+function labT(){tSeg();var v=+$('#tV').value,t=v*0.02,tau=v*0.006,s=v*0.015,Q,S1,lab;
+  if(tI===0){Q=(6-t)/0.075;S1=function(q){return 0.5+q/40+t};lab='t = '+f(t,2)+' zł/kg'}
+  else if(tI===1){Q=(6.5-0.5*(1+tau))/(0.05+(1+tau)/40);S1=function(q){return (1+tau)*(0.5+q/40)};lab='τ = '+f(tau*100,0)+'%'}
+  else{Q=(6+s)/0.075;S1=function(q){return 0.5+q/40-s};lab='s = '+f(s,2)+' zł/kg'}
+  $('#tVv').textContent=lab;
+  var Pd=6.5-Q/20,Ps=0.5+Q/40,wd=Math.abs(Pd-Ps),bud=wd*Q,dwl=0.5*wd*Math.abs(80-Q);
+  plot('tC',{xm:140,ym:7,nx:7,ny:7,xl:'ilość, tys. t',yl:'cena, zł/kg',bars:wd>0.001?[[0,Q,Math.max(Pd,Ps),Math.min(Pd,Ps),'a5']]:[],
+    lines:[{fn:function(q){return 0.5+q/40},a:0,b:140,c:'c5',t:'S₀',tc:'t3',at:132,dx:-4,dy:18,an:'end'},{fn:S1,a:0,b:140,c:'c2',t:'S₁',tc:'t2',at:120,dx:6,dy:-8},{fn:function(q){return 6.5-q/20},a:0,b:130,c:'c1',t:'D',tc:'t1',at:8,dx:6,dy:-6}],
+    segs:[[Q,Math.min(Pd,Ps),Q,Math.max(Pd,Ps),'c4']],hl:[[Pd,'nabywca płaci '+f(Pd,2)],[Ps,'producent dostaje '+f(Ps,2)]],pts:[[80,2.5,'E₀','ur',4],[Q,Pd,'E₁','ul']]});
+  var sub=tI===2,shB=wd>0?Math.abs(Pd-2.5)/wd:0;
+  $('#tK').innerHTML='<span>Ilość: przed → po</span><b>80,0 → '+f(Q,1)+' tys. t</b><span>Cena płacona przez nabywców</span><b>'+f(Pd,2)+' zł/kg</b><span>Cena otrzymywana przez producentów</span><b>'+f(Ps,2)+' zł/kg</b><span>'+(sub?'Koszt dotacji dla budżetu':'Wpływy budżetu')+'</span><b>'+f(bud,1)+' mln zł</b><span>'+(sub?'Korzyść nabywców w cenie':'Udział nabywców w ciężarze')+'</span><b>'+f(shB*100,0)+'%</b><span>Strata dobrobytu</span><b>'+f(dwl,1)+' mln zł</b>';
+  $('#tO').textContent=(tI===0?'Podatek kwotowy przesuwa krzywą podaży równolegle w górę o '+f(t,2)+' zł. ':tI===1?'Podatek ad valorem obraca krzywą podaży: przy cenie 1 zł dodaje '+f(tau,2)+' zł, przy cenie 4 zł już '+f(4*tau,2)+' zł. ':'Dotacja przesuwa krzywą podaży w dół o '+f(s,2)+' zł, czyli w prawo. ')+
+    (wd>0.001?'Popyt jest tu bardziej stromy niż podaż, więc '+(sub?'większą część dotacji przejmują nabywcy przez niższą cenę.':'większą część ciężaru ponoszą nabywcy.')+' Pole zacienione to '+(sub?'wydatek budżetu':'wpływy budżetu')+', a strata dobrobytu wynika z tego, że ilość odbiega od ilości równowagi bez interwencji.':'Bez instrumentu rynek jest w równowadze E₀: 80 tys. t po 2,50 zł/kg.');}
+on(['tV'],labT);
+
+/* 5a. laboratorium podaży pszenicy */
+var GB={gP:900,gF:100,gO:6.5,gR:2000,gT:5,gZ:0,gN:100,gE:0,gI:7,gD:0};
+var GS=[['Wyjściowy',{}],['Kryzys nawozowy 2022',{gF:300,gO:8,gE:10}],['Susza',{gZ:-3,gE:5}],['Drogi rzepak',{gR:3000}],['Postęp technologiczny',{gT:9}],['Dopłata 100 zł/t',{gD:100}]],gSc=0;
+var gSeg=segs('gS',GS.map(function(s){return s[0]}),function(){return gSc},function(i){gSc=i;for(var k in GB)if(k!=='gP')$('#'+k).value=(k in GS[i][1])?GS[i][1][k]:GB[k]},function(){labG()});
+function labG(){gSeg();var g={};for(var k in GB)g[k]=+$('#'+k).value;
+  $('#gPv').textContent=f(g.gP,0)+' zł/t';$('#gFv').textContent=f(g.gF,0);$('#gOv').textContent=f(g.gO,2)+' zł/l';$('#gRv').textContent=f(g.gR,0)+' zł/t';$('#gTv').textContent=f(g.gT,1)+' / 10';
+  $('#gZv').textContent=(g.gZ<=-2.5?'skrajna susza':g.gZ<0?'niekorzystna':g.gZ===0?'przeciętna':'korzystna')+' ('+sg(g.gZ,1)+')';$('#gNv').textContent=f(g.gN,0)+' (2025 = 100)';$('#gEv').textContent=sg(g.gE,0)+'%';$('#gIv').textContent=f(g.gI,1)+'%';$('#gDv').textContent=f(g.gD,0)+' zł/t';
+  var W=[['Ceny nawozów',-0.012*(g.gF-100)],['Olej napędowy',-0.3*(g.gO-6.5)],['Cena rzepaku',-0.002*(g.gR-2000)],['Technologia',0.3*(g.gT-5)],['Pogoda',1.0*g.gZ],['Liczba producentów',0.08*(g.gN-100)],['Oczekiwania cenowe',-0.08*g.gE],['Koszt kredytu',-0.1*(g.gI-7)],['Dopłata',0.01*g.gD]];
+  var sh=W.reduce(function(s,w){return s+w[1]},0),c=4+sh,Pe=(23.8-c)/0.022,Qe=c+0.01*Pe,Qp=Math.max(0,c+0.01*g.gP);
+  plot('gC',{xm:24,ym:2000,nx:6,ny:4,xl:'ilość, mln t',yl:'cena, zł/t',
+    lines:[{fn:function(q){return (q-4)/0.01},a:0,b:24,c:'c5',t:'S₀',tc:'t3',at:17.5,dx:6,dy:14},{fn:function(q){return (q-c)/0.01},a:0,b:24,c:'c2',t:'S₁',tc:'t2',at:Math.min(22.5,c+18.5),dx:-24,dy:-6},{fn:function(q){return (23.8-q)/0.012},a:0,b:24,c:'c3',t:'D',tc:'t3',at:22.5,dx:4,dy:-8}],
+    hl:[[g.gP,'P = '+f(g.gP,0)]],pts:[[13,900,'E₀','dl',4],[Qe,Pe,'E₁','ur'],[Qp,g.gP,'Qₛ(P)','dr',4]]});
+  var mx=Math.max(3,Math.abs(sh));W.forEach(function(w){mx=Math.max(mx,Math.abs(w[1]))});$('#gW').innerHTML=W.map(function(w){var p=Math.min(50,Math.abs(w[1])/mx*50);return '<div class="r"><span>'+w[0]+'</span><div class="tk c"><i class="'+(w[1]>=0?'m':'n')+'" style="left:'+(w[1]>=0?50:50-p)+'%;width:'+p+'%"></i></div><em>'+sg(w[1],2)+'</em></div>'}).join('')+
+    '<div class="r sum"><span>Razem</span><div class="tk c"><i class="'+(sh>=0?'m':'n')+'" style="left:'+(sh>=0?50:50-Math.abs(sh)/mx*50)+'%;width:'+(Math.abs(sh)/mx*50)+'%"></i></div><em>'+sg(sh,2)+'</em></div>';
+  $('#gK').innerHTML='<span>Przesunięcie podaży przy każdej cenie</span><b>'+sg(sh,2)+' mln t</b><span>Wielkość podaży przy P = '+f(g.gP,0)+' zł/t</span><b>'+f(Qp,2)+' mln t</b><span>Cena równowagi: przed → po</span><b>900 → '+f(Pe,0)+' zł/t</b><span>Ilość równowagi: przed → po</span><b>13,00 → '+f(Qe,2)+' mln t</b><span>Elastyczność podaży w nowej równowadze</span><b>'+f(0.01*Pe/Qe,2)+'</b>';
+  var big=W.slice().sort(function(a,b){return Math.abs(b[1])-Math.abs(a[1])})[0];
+  $('#gX').textContent=(Math.abs(sh)<0.005?'Wszystkie determinanty są na poziomie wyjściowym. Krzywa podaży się nie przesunęła. ':'Krzywa podaży przesunęła się '+(sh>0?'w prawo':'w lewo')+' o '+f(Math.abs(sh),2)+' mln t. Najsilniej działa determinanta: '+big[0].toLowerCase()+'. Cena równowagi '+(Pe>900?'wzrosła':'spadła')+' do '+f(Pe,0)+' zł/t, a ilość '+(Qe>13?'wzrosła':'spadła')+' do '+f(Qe,2)+' mln t. ')+
+    'Suwak ceny pszenicy nie przesuwa krzywej. Pokazuje tylko punkt na S₁: przy '+f(g.gP,0)+' zł/t producenci oferują '+f(Qp,2)+' mln t'+(Math.abs(g.gP-Pe)<10?', czyli tyle, ile wynosi równowaga.':(g.gP>Pe?', więcej niż chcą kupić nabywcy, więc powstaje nadwyżka.':', mniej niż chcą kupić nabywcy, więc powstaje niedobór.'));}
+for(var gk in GB)(function(k){$('#'+k).addEventListener('input',function(){if(k!=='gP')gSc=-1;labG()})})(gk);labG();
+
+/* 5b. ruch czy przesunięcie */
+var EV=[
+ ['Po nieurodzaju w Australii rośnie światowa cena pszenicy. Skutek dla podaży pszenicy w Polsce.',1,'Zmienia się cena samego dobra, więc rośnie wielkość podaży. To ruch w górę wzdłuż krzywej.'],
+ ['Ceny nawozów azotowych spadają o 40 procent. Skutek dla podaży pszenicy.',2,'Tańszy czynnik produkcji obniża koszt krańcowy przy każdej ilości.'],
+ ['Cena rzepaku rośnie o połowę. Skutek dla podaży pszenicy.',0,'Rzepak i pszenica konkurują o tę samą ziemię. Część areału przechodzi pod rzepak.'],
+ ['Rośnie cena masła. Skutek dla podaży odtłuszczonego mleka w proszku.',2,'To dobra łączne. Więcej śmietanki na masło oznacza więcej mleka odtłuszczonego do wysuszenia.'],
+ ['Rolnicy spodziewają się, że za trzy miesiące zboże zdrożeje. Skutek dla bieżącej podaży zboża.',0,'Zboże można przechować, więc opłaca się sprzedać później. Bieżąca podaż maleje.'],
+ ['Państwo wprowadza dopłatę 100 zł do każdej sprzedanej tony. Skutek dla podaży.',2,'Dotacja obniża minimalną cenę rynkową, przy której producent dostarcza każdą ilość.'],
+ ['Rosną ceny uprawnień do emisji CO₂. Skutek dla podaży energii z elektrowni węglowych.',0,'Koszt emisji jest częścią kosztu krańcowego elektrowni.'],
+ ['Hodowcy wprowadzają nową, plenniejszą odmianę pszenicy. Skutek dla podaży.',2,'Postęp technologiczny daje więcej produktu z tych samych nakładów.'],
+ ['Rośnie popyt na mieszkania i ich ceny idą w górę. Skutek dla podaży mieszkań.',1,'Popyt podnosi cenę, a deweloperzy odpowiadają ruchem wzdłuż krzywej podaży. Sama krzywa podaży stoi w miejscu.'],
+ ['W kilku powiatach wykryto afrykański pomór świń i trzeba wybić stada. Skutek dla podaży wieprzowiny.',0,'Szok sanitarny niszczy zdolności produkcyjne.'],
+ ['Na osiedle wchodzi piętnaście nowych piekarni. Skutek dla lokalnej podaży pieczywa.',2,'Więcej producentów to większa suma pozioma podaży firm.'],
+ ['Rośnie płaca minimalna. Skutek dla podaży usług fryzjerskich.',0,'Praca to główny koszt usługi, więc rośnie koszt krańcowy.']];
+var vS=0,vN=0;
+function ev(){var L=$('#vL');L.innerHTML='';vS=0;vN=0;$('#vS').textContent='Trafienia: 0 / '+EV.length;
+  EV.forEach(function(e){var c=el('div','card'),t=el('div','','<p>'+e[0]+'</p>'),sm=el('small','',e[2]),cb=el('div','cb');sm.hidden=true;t.appendChild(sm);
+    ['w lewo','ruch wzdłuż','w prawo'].forEach(function(n,j){var b=el('button','',n);b.type='button';b.addEventListener('click',function(){[].forEach.call(cb.children,function(x){x.disabled=true});
+      var ok=j===e[1];c.classList.add(ok?'ok':'bad');sm.hidden=false;sm.textContent=(ok?'Dobrze. ':'Poprawnie: '+['przesunięcie w lewo','ruch wzdłuż krzywej','przesunięcie w prawo'][e[1]]+'. ')+e[2];vN++;if(ok)vS++;$('#vS').textContent='Trafienia: '+vS+' / '+EV.length});cb.appendChild(b)});
+    c.appendChild(t);c.appendChild(cb);L.appendChild(c)});}
+$('#vR').addEventListener('click',ev);ev();
+
+/* 6a. elastyczność liniowej podaży */
+function labE(){var c=+$('#eC').value,d=+$('#eD').value,P=+$('#eP').value;$('#eCv').textContent=sg(c,0);$('#eDv').textContent=f(d,0);$('#ePv').textContent=f(P,1);
+  var Q=c+d*P,E=Q>0?d*P/Q:NaN,pm=-c/d;
+  var pts=Q>0?[[Q,P,'Eₛ = '+f(E,2),'ul']]:[[0,Math.max(P,0),'Q = 0','r']];
+  if(c<0)pts.push([0,pm,'cena progowa '+f(pm,2),'r',4]);else if(c>0)pts.push([c,0,'Q₀ = '+f(c,0),'ur',4]);
+  plot('eG',{xm:320,ym:10,nx:8,ny:5,xl:'ilość',yl:'cena',lines:[{fn:function(q){return q/d},a:0,b:320,c:'c5',t:'Eₛ = 1',tc:'t3',at:Math.min(300,9.2*d),dx:6,dy:14},{fn:function(q){return (q-c)/d},a:Math.max(0,c),b:320,c:'c1',t:'S',tc:'t1',at:Math.min(310,c+9.5*d),dx:-16,dy:-4}],
+    segs:Q>0?[[Q,0,Q,P,'c3'],[0,P,Q,P,'c3']]:[],pts:pts});
+  function Ea(p){var q=c+d*p;return q>0?f(d*p/q,2):'—'}
+  $('#eK').innerHTML='<span>Wielkość podaży przy P = '+f(P,1)+'</span><b>'+f(Math.max(0,Q),1)+'</b><span>Elastyczność w tym punkcie</span><b>'+(Q>0?f(E,3):'—')+'</b><span>Elastyczność przy P = 2, 5 i 9</span><b>'+Ea(2)+' · '+Ea(5)+' · '+Ea(9)+'</b>';
+  $('#eO').textContent=Q<=0?'Przy tej cenie nic nie jest oferowane: cena jest niższa od ceny progowej '+f(pm,2)+'.':
+    (c<0?'Prosta przecina oś ceny w punkcie '+f(pm,2)+', więc podaż jest elastyczna w każdym punkcie (Eₛ > 1). Elastyczność maleje do 1, gdy cena rośnie.':c===0?'Prosta przechodzi przez początek układu, więc elastyczność wynosi 1 w każdym punkcie, niezależnie od nachylenia d.':'Prosta przecina oś ilości w punkcie '+f(c,0)+', więc podaż jest nieelastyczna w każdym punkcie (Eₛ < 1). Elastyczność rośnie do 1, gdy cena rośnie.')+' Zmiana nachylenia d nie zmienia tej klasyfikacji.';}
+on(['eC','eD','eP'],labE);
+
+/* 6b. trzy okresy Marshalla */
+var KH=[{n:'Okres rynkowy',Q:50,P:8,s:'pionowa: Q = 50',d:'W ciągu kilku tygodni liczba mieszkań oferowanych do sprzedaży jest dana. Cały wzrost popytu przechodzi w cenę: z 5 do 8 tys. zł za m². Wysoka cena to sygnał dla producentów.'},
+ {n:'Okres krótki',Q:60,P:7,s:'Q = 25 + 5P',d:'W ciągu roku lub dwóch deweloperzy przyspieszają budowy, kończą wstrzymane etapy, a część właścicieli wystawia mieszkania na sprzedaż. Ilość rośnie do 60, cena spada do 7.'},
+ {n:'Okres długi',Q:74,P:5.6,s:'Q = −150 + 40P',d:'Po kilku latach powstają nowe projekty, przybywa gruntów z planami miejscowymi i firm budowlanych. Ilość rośnie do 74, a cena wraca blisko poziomu wyjściowego. Długookresowa podaż jest elastyczna.'}],kI=0;
+var kSeg=segs('kS',KH.map(function(k){return k.n}),function(){return kI},function(i){kI=i},function(){labK()});
+function labK(){kSeg();var S=[{segs:[[50,0,50,10,'c3']]},{fn:function(q){return (q-25)/5},a:25,b:100},{fn:function(q){return (q+150)/40},a:0,b:100}];
+  var o={xm:100,ym:10,nx:5,ny:5,xl:'liczba mieszkań na sprzedaż, tys.',yl:'cena, tys. zł za m²',segs:[],lines:[{fn:function(q){return (100-q)/10},a:0,b:100,c:'c5',t:'D₀',tc:'t3',at:6,dx:6,dy:-4},{fn:function(q){return (130-q)/10},a:30,b:100,c:'c1',t:'D₁',tc:'t1',at:92,dx:6,dy:-8}]};
+  [0,1,2].forEach(function(i){var on=i===kI;if(i===0)o.segs.push([50,0,50,10,on?'c2':'c3']);else o.lines.push({fn:S[i].fn,a:S[i].a,b:S[i].b,c:on?'c2':'c3',t:on?['','S krótki','S długi'][i]:'',tc:'t2',at:i===1?66:90,dx:i===1?8:-10,dy:i===1?4:-10,an:i===1?'start':'end'})});
+  if(kI===0)o.txt=[[52,9.4,'S rynkowy','t2','start']];
+  o.pts=[[50,5,'E₀','dr',4],[KH[kI].Q,KH[kI].P,'E₁','ur']];o.hl=[[5,'cena wyjściowa 5']];plot('kC',o);
+  var r='<tr><th>Horyzont</th><th>Podaż</th><th class="num">Cena</th><th class="num">Ilość</th><th class="num">Elastyczność łukowa</th></tr>';
+  KH.forEach(function(k,i){var eq=((k.Q-50)/((k.Q+50)/2))/((k.P-5)/((k.P+5)/2));r+='<tr'+(i===kI?' class="mg"':'')+'><td>'+k.n+'</td><td>'+k.s+'</td><td class="num">'+f(k.P,1)+'</td><td class="num">'+f(k.Q,0)+'</td><td class="num">'+f(eq,2)+'</td></tr>'});
+  $('#kT').innerHTML=r;$('#kO').textContent=KH[kI].d;}
+labK();
+
+/* 7a. model pajęczyny */
+var wI=0,wSeg=segs('wS',['Oczekiwania naiwne','Oczekiwania adaptacyjne','Oczekiwania racjonalne'],function(){return wI},function(i){wI=i},function(){labW()});
+function labW(){wSeg();var d=+$('#wD').value,lam=+$('#wL').value,P0=+$('#wP').value,c=50-5*d;$('#wDv').textContent=f(d,1)+' (d/b = '+f(d/10,2)+')';$('#wLv').textContent=f(lam,2)+(wI===1?'':' (tylko dla adaptacyjnych)');$('#wPv').textContent=f(P0,1)+' zł/kg';
+  $('#wL').disabled=wI!==1;
+  var P=[P0],Pe=5,path=[[100-10*P0,P0]],dots=[],out=false,Qs=[];
+  for(var t=1;t<=20;t++){if(wI===0)Pe=P[t-1];else if(wI===1)Pe=Pe+lam*(P[t-1]-Pe);else Pe=5;
+    var q=Math.max(0,c+d*Pe),p=(100-q)/10;if(p>10){p=10;out=true}if(p<0){p=0;out=true}
+    path.push([q,Pe]);path.push([q,p]);P.push(p);Qs.push(q);if(out)break}
+  plot('wC1',{xm:100,ym:10,nx:5,ny:5,xl:'podaż żywca, tys. t',yl:'cena, zł/kg',lines:[{fn:function(q){return (100-q)/10},a:0,b:100,c:'c1',t:'D',tc:'t1',at:6,dx:6,dy:-4},{fn:function(q){return (q-c)/d},a:Math.max(0,c),b:100,c:'c2',t:'S',tc:'t2',at:Math.min(94,c+9.4*d),dx:-18,dy:0}],
+    path:[['cw',path]],pts:[[50,5,'E*','dr',4]],dots:path.slice(1).filter(function(_,i){return i%2===1}).map(function(p){return [p[0],p[1],'cwd']})});
+  var ts=P.map(function(p,i){return [i,p]});
+  plot('wC2',{xm:20,ym:10,nx:5,ny:5,xl:'okres t',yl:'cena P, zł/kg',path:[['cw',ts]],dots:ts.map(function(p){return [p[0],p[1],'cwd']}),hl:[[5,'P* = 5']]});
+  var m=wI===0?-d/10:(wI===1?1-lam*(1+d/10):0),dev10=P.length>10?Math.abs(P[10]-5):NaN;
+  var typ=wI===2?'brak cyklu':(Math.abs(m)<1-1e-9?(m<0?'wahania wygasające':'zbieżność monotoniczna'):(Math.abs(m)<1+1e-9?'wahania o stałej amplitudzie':'wahania narastające'));
+  $('#wK').innerHTML='<span>Stosunek reakcji podaży do popytu d/b</span><b>'+f(d/10,2)+'</b><span>Mnożnik odchylenia na okres</span><b>'+f(m,2)+'</b><span>Typ dynamiki</span><b>'+typ+'</b><span>Cena w okresach 1, 2, 3</span><b>'+P.slice(1,4).map(function(p){return f(p,2)}).join(' · ')+'</b><span>Odchylenie od P* w okresie 10</span><b>'+(isNaN(dev10)?'poza zakresem':f(dev10,3))+'</b>';
+  $('#wO').textContent=wI===2?'Producenci znają strukturę rynku i oczekują ceny równowagi 5 zł. Już w pierwszym okresie wracają do produkcji 50 tys. t i cykl nie powstaje. Muth pokazał, że systematyczne cykle są niezgodne z racjonalnością: ktoś, kto przewiduje cykl, zarobiłby, grając przeciw niemu.':
+    (out?'Wahania narastają tak szybko, że cena wychodzi poza realistyczny zakres. W rzeczywistości ograniczają to zapasy, interwencje i wypadanie producentów z rynku.':
+    (wI===0?'Przy oczekiwaniach naiwnych producenci zakładają, że cena z poprzedniego roku się utrzyma. Wysoka cena wywołuje nadprodukcję, nadprodukcja niską cenę, a niska cena niedobór. ':'Przy oczekiwaniach adaptacyjnych producenci poprawiają prognozę tylko o część błędu, więc reagują ostrożniej. ')+
+    (Math.abs(m)<1?'Odchylenie maleje co okres, rynek zbiega do równowagi.':Math.abs(m)<1+1e-9?'Odchylenie ma stałą amplitudę.':'Odchylenie rośnie z okresu na okres. Zmniejsz d albo, przy oczekiwaniach adaptacyjnych, wagę λ.'));}
+on(['wD','wL','wP'],labW);
+
+/* 7b. kalkulator Nerlove'a */
+function labN(){var b1=+$('#nB1').value,b2=+$('#nB2').value,Pm=+$('#nP').value,Qm=+$('#nQ').value;
+  $('#nB1v').textContent=f(b1,4);$('#nB2v').textContent=f(b2,2);$('#nPv').textContent=f(Pm,0)+' zł/t';$('#nQv').textContent=f(Qm,1)+' mln t';
+  var es=b1*Pm/Qm,el=es/(1-b2),med=b2>0?Math.log(0.5)/Math.log(b2):0,ml=b2/(1-b2),dP=0.1*Pm,bars=[],lr=el*10;
+  for(var k=1;k<=10;k++){var v=b1*dP*(1-Math.pow(b2,k))/(1-b2)/Qm*100;bars.push([k-0.34,k+0.34,v,0,'b2'])}
+  var ym=nice(lr*1.15),ax=axisOf(ym);
+  plot('nC',{xm:11,x0:0,ym:ym,nx:11,ny:ax.nx,yd:ax.d,ys:'%',xl:'okres po zmianie ceny',yl:'wzrost podaży',bars:bars,hl:[[lr,'pełne dostosowanie: '+f(lr,2)+'%']]});
+  $('#nK').innerHTML='<span>Współczynnik dostosowania δ = 1 − β₂</span><b>'+f(1-b2,2)+'</b><span>Długookresowy wpływ ceny β₁/(1 − β₂)</span><b>'+f(b1/(1-b2),4)+' mln t na zł/t</b><span>Elastyczność krótkookresowa</span><b>'+f(es,3)+'</b><span>Elastyczność długookresowa</span><b>'+f(el,3)+'</b><span>Mediana opóźnienia</span><b>'+(b2>0?f(med,2)+' okr.':'0')+'</b><span>Średnie opóźnienie β₂/(1 − β₂)</span><b>'+f(ml,2)+' okr.</b>';
+  $('#nO').textContent='Po trwałym wzroście ceny o 10 procent podaż w pierwszym okresie rośnie o '+f(es*10,2)+'%, czyli o '+f((1-b2)*100,0)+'% pełnej reakcji. Połowa dostosowania następuje po '+(b2>0?f(med,1):'mniej niż jednym')+' okresie'+(b2>0&&med>=1.5?'ach':'')+'. Pełna reakcja to '+f(lr,2)+'%. '+(el>1?'W długim okresie podaż jest elastyczna, choć w krótkim jest nieelastyczna. ':'')+'Im bliżej jedności jest β₂, tym wolniej producenci dostosowują produkcję i tym większa różnica między elastycznością krótko- i długookresową.';}
+on(['nB1','nB2','nP','nQ'],labN);
+
+/* 8. identyfikacja podaży */
+var iSeed=7;
+function labI(){var ka=+$('#iK').value,su=+$('#iU').value,sv=+$('#iV').value,n=+$('#iN').value;$('#iKv').textContent=f(ka,1);$('#iUv').textContent=f(su,1);$('#iVv').textContent=f(sv,1);$('#iNv').textContent=n;
+  var R=rng(iSeed),Z=[],P=[],Q=[],dots=[];
+  for(var i=0;i<n;i++){var z=gauss(R),u=su*gauss(R),v=sv*gauss(R),p=(100+ka*z+u-v)/18,q=20+8*p+v;Z.push(z);P.push(p);Q.push(q);dots.push([q,p])}
+  var vp=cov(P,P),bO=vp>1e-12?cov(Q,P)/vp:NaN,aO=mean(Q)-bO*mean(P),cz=cov(P,Z),bI=Math.abs(cz)>1e-9?cov(Q,Z)/cz:NaN,aI=mean(Q)-bI*mean(P);
+  var rss=0,rssO=0,szz=0,spz=0;for(i=0;i<n;i++){var e=Q[i]-aI-bI*P[i];rss+=e*e;var eo=Q[i]-aO-bO*P[i];rssO+=eo*eo}
+  var seI=isNaN(bI)?NaN:Math.sqrt(rss/(n-2)*cov(Z,Z)*n)/Math.abs(cz*n),seO=Math.sqrt(rssO/(n-2)/(vp*n));
+  var r2=cz*cz/(vp*cov(Z,Z)),F=r2<1?r2*(n-2)/(1-r2):Infinity,sD=ka*ka+su*su,pl=(sD+sv*sv)>0?8-18*sv*sv/(sD+sv*sv):NaN;
+  function ln(a,b,cls){if(isNaN(b))return null;if(Math.abs(b)<0.05)return null;return {fn:function(q){return (q-a)/b},a:0,b:140,c:cls}}
+  var L=[{fn:function(q){return (q-20)/8},a:20,b:140,c:'c2',t:'S',tc:'t2',at:110,dx:6,dy:12},{fn:function(q){return (120-q)/10},a:0,b:120,c:'c5',t:'D(Z=0)',tc:'t3',at:16,dx:4,dy:-6}];
+  var lo=ln(aO,bO,'c4'),li=ln(aI,bI,'c6');if(lo)L.push(lo);if(li&&F>0.5)L.push(li);
+  plot('iC',{xm:140,ym:12,nx:7,ny:6,xl:'ilość Q',yl:'cena P',dots:dots,lines:L});
+  $('#iT').innerHTML='<tr><th>Metoda</th><th class="num">Oszacowanie α₁</th><th class="num">Błąd standardowy</th><th>Uwagi</th></tr>'+
+    '<tr><td>Prawdziwy parametr</td><td class="num">8,00</td><td class="num">—</td><td>nachylenie podaży w modelu</td></tr>'+
+    '<tr><td>MNK: regresja Q na P</td><td class="num">'+f(bO,2)+'</td><td class="num">'+f(seO,2)+'</td><td>granica teoretyczna: '+(isNaN(pl)?'—':f(pl,2))+'</td></tr>'+
+    '<tr><td>IV: instrument Z</td><td class="num">'+(isNaN(bI)?'—':f(bI,2))+'</td><td class="num">'+(isNaN(seI)?'—':f(seI,2))+'</td><td>F z pierwszego etapu: '+(isFinite(F)?f(F,1):'∞')+'</td></tr>';
+  var msg=ka===0?'Instrument nie przesuwa popytu (κ = 0), więc warunek rzędu macierzy nie jest spełniony. Kowariancja ceny z Z jest bliska zeru i estymator IV jest nieokreślony albo skrajnie niestabilny. ':
+    (F<10?'Statystyka F z pierwszego etapu wynosi '+f(F,1)+', poniżej progu 10. Instrument jest słaby: oszacowanie IV ma duży rozrzut. Losuj nowe próby, a zobaczysz, jak bardzo się zmienia. ':'Instrument jest silny (F = '+f(F,1)+'), a estymator IV daje '+f(bI,2)+', blisko prawdziwego nachylenia 8. ');
+  msg+=sv===0?'Bez szoków podaży punkty równowagi leżą na krzywej podaży i nawet MNK ją odtwarza.':(sD===0?'Przesuwa się tylko podaż, więc punkty układają się wzdłuż krzywej popytu i MNK szacuje nachylenie popytu, czyli −10.':'MNK daje '+f(bO,2)+', bo szoki podaży stanowią '+f(sv*sv/(sD+sv*sv)*100,0)+'% wariancji przesunięć i ciągną oszacowanie w stronę nachylenia popytu.');
+  $('#iO').textContent=msg;}
+on(['iK','iU','iV','iN'],labI);$('#iG').addEventListener('click',function(){iSeed++;labI()});
+
+/* zagadki */
+var RID=[
+ ['Cena masła rośnie, a cena odtłuszczonego mleka w proszku w tym samym czasie spada, choć popyt na proszek się nie zmienił. Jak to wyjaśnić?','Masło i mleko w proszku są dobrami łącznymi. Droższe masło skłania mleczarnie do odwirowania większej ilości śmietanki, a przy tym powstaje więcej mleka odtłuszczonego, które suszy się na proszek. Podaż proszku przesuwa się w prawo i jego cena spada.'],
+ ['Rolnik ma pełne magazyny pszenicy. Ceny rosną od dwóch miesięcy, a on nadal nie sprzedaje. Czy łamie prawo podaży?','Nie. Prawo podaży obowiązuje przy niezmienionych pozostałych warunkach, a tu zmieniają się oczekiwania. Skoro ceny rosną, rolnik spodziewa się dalszych podwyżek. Oczekiwany wzrost ceny dobra magazynowalnego przesuwa podaż bieżącą w lewo.'],
+ ['Dlaczego podręcznik rysuje krzywą podaży dla gałęzi rolniczej, a dla monopolisty, na przykład jedynego operatora sieci, już nie?','Krzywa podaży zakłada, że producent przyjmuje cenę i dobiera do niej ilość. Monopolista sam wybiera cenę na krzywej popytu, a ta sama ilość może być optymalna przy różnych cenach, zależnie od elastyczności popytu. Nie ma więc jednoznacznej zależności między ceną a ilością, czyli krzywej podaży.'],
+ ['W 2022 roku właściciele farm wiatrowych osiągali rekordowe zyski, choć wiatr nie zdrożał, a ich koszty prawie się nie zmieniły. Skąd te zyski?','Z kolejki zasługowej. Cenę rozliczeniową wyznaczały drogie elektrownie gazowe i węglowe, a wszyscy wytwórcy dostawali tę samą cenę. Różnica między ceną a kosztem krańcowym wiatru bliskim zera to renta inframarginalna. Dlatego Unia wprowadziła czasowy pułap przychodów takich wytwórców.'],
+ ['Gaz ziemny jest droższy od węgla brunatnego w przeliczeniu na energię. Mimo to przy wysokiej cenie uprawnień do emisji elektrownia gazowa trafia w kolejce przed elektrownię na węgiel brunatny. Jak to możliwe?','Koszt krańcowy obejmuje paliwo i emisję. Węgiel brunatny emituje około 1,1 tony CO₂ na megawatogodzinę, a nowoczesny blok gazowy około 0,37 tony. Przy wysokiej cenie uprawnień różnica w kosztach emisji przewyższa różnicę w kosztach paliwa. To przełączenie paliw.'],
+ ['Stawka programistki wzrosła o 30 procent, a ona zmniejszyła tydzień pracy z pięciu do czterech dni. Czy zachowała się nieracjonalnie?','Nie. Przy wysokiej płacy efekt dochodowy może przeważyć nad efektem substytucyjnym. Wyższy dochód pozwala „kupić” więcej czasu wolnego. To odcinek krzywej podaży pracy wygięty wstecz.'],
+ ['Analityk wyznaczył regresję godzinowej produkcji energii na cenie i otrzymał ujemny współczynnik. Ogłosił, że krzywa podaży energii opada. Co przeoczył?','Problem identyfikacji. Na rynku energii przesuwa się głównie podaż, bo zmienia się wiatr i nasłonecznienie. Punkty równowagi układają się wtedy wzdłuż krzywej popytu, więc analityk oszacował nachylenie popytu, a nie podaży.'],
+ ['Po dwóch latach wysokich cen tuczników hodowcy rozbudowali stada. Rok później ceny spadły poniżej kosztów. Jak to wyjaśnia model pajęczyny i co zmieniłyby oczekiwania racjonalne?','Hodowcy decydowali na podstawie wysokiej ceny z przeszłości, a produkcja pojawiła się z opóźnieniem. Wszyscy zwiększyli podaż naraz, więc cena spadła. Przy oczekiwaniach racjonalnych hodowcy przewidzieliby, że łączna reakcja obniży cenę, i nie rozbudowaliby stad tak mocno.'],
+ ['Państwo wprowadza dopłatę 100 zł do tony pszenicy. Cena rynkowa spada o 40 zł. Kto zyskał na dopłacie i ile?','Nabywcy płacą o 40 zł mniej, a producenci otrzymują cenę niższą o 40 zł plus 100 zł dopłaty, czyli o 60 zł więcej. Dotacja dzieli się jak podatek: więcej zyskuje strona mniej elastyczna. Tu producenci przejęli 60 procent dopłaty.'],
+ ['Powierzchnia ziemi w mieście jest stała. Czy podaż działek budowlanych w mieście jest doskonale nieelastyczna?','Fizyczna podaż ziemi jest stała, ale podaż ziemi pod budowę mieszkań nie jest. Wyższe ceny skłaniają do odrolnienia gruntów na obrzeżach, zmiany planów miejscowych, przekształcania terenów poprzemysłowych i budowania wyżej. Wysokość budynku jest substytutem ziemi.']];
+var rl=$('#riddleList');
+RID.forEach(function(r,i){var d=el('div','riddle');
+  d.innerHTML='<div class="k">Zagadka '+(i+1)+'</div><p>'+r[0]+'</p><details><summary>Pokaż rozwiązanie</summary><div class="ans"><p>'+r[1]+'</p></div></details>';rl.appendChild(d)});
+
+/* test */
+var QZ=[
+ ['Krótkookresowa krzywa podaży firmy w konkurencji doskonałej to:',['krzywa przeciętnego kosztu całkowitego','rosnąca część krzywej kosztu krańcowego powyżej minimum przeciętnego kosztu zmiennego','rosnąca część krzywej kosztu krańcowego powyżej minimum przeciętnego kosztu całkowitego','krzywa przeciętnego kosztu zmiennego'],1,'Poniżej minimum AVC firma wstrzymuje produkcję, bo przychód nie pokrywa kosztów zmiennych.'],
+ ['Wzrost ceny rzepaku, który jest uprawiany na tej samej ziemi co pszenica, powoduje:',['przesunięcie podaży pszenicy w prawo','przesunięcie podaży pszenicy w lewo','ruch wzdłuż krzywej podaży pszenicy','brak zmian'],1,'Rzepak i pszenica są dobrami konkurencyjnymi w produkcji.'],
+ ['Wzrost ceny wołowiny wpływa na podaż skór bydlęcych przez:',['przesunięcie w lewo','przesunięcie w prawo','ruch wzdłuż krzywej','zmianę elastyczności popytu'],1,'Wołowina i skóra są dobrami łącznymi: więcej uboju to więcej skór.'],
+ ['Elastyczność liniowej krzywej podaży przechodzącej przez początek układu wynosi:',['0','0,5','1','zależy od nachylenia'],2,'Dla Q = d·P mamy Eₛ = d·P / (d·P) = 1 niezależnie od d.'],
+ ['Podatek kwotowy t nałożony na producentów:',['obraca krzywą podaży','przesuwa krzywą podaży równolegle w górę o t','przesuwa krzywą popytu w prawo','nie zmienia ceny płaconej przez nabywców'],1,'P = Pₛ(Q) + t. Podatek ad valorem obracałby krzywą.'],
+ ['W modelu pajęczyny z oczekiwaniami naiwnymi wahania wygasają, gdy:',['podaż reaguje na cenę silniej niż popyt (d > b)','podaż reaguje na cenę słabiej niż popyt (d < b)','d = b','popyt jest doskonale elastyczny'],1,'Odchylenie mnoży się co okres przez −d/b.'],
+ ['W modelu Nerlove’a oszacowano Qₜ = 2 + 0,2·Pₜ₋₁ + 0,75·Qₜ₋₁. Długookresowy wpływ ceny na podaż wynosi:',['0,2','0,75','0,8','0,95'],2,'β₁/(1 − β₂) = 0,2/0,25 = 0,8.'],
+ ['Na rynku energii działającym według kolejki zasługowej cenę wyznacza:',['średni koszt wszystkich elektrowni','koszt krańcowy ostatniej jednostki potrzebnej do pokrycia zapotrzebowania','koszt najtańszej elektrowni','cena gazu ziemnego'],1,'Wszystkie tańsze źródła dostają tę samą cenę i zarabiają rentę inframarginalną.'],
+ ['Aby oszacować krzywą podaży metodą zmiennych instrumentalnych, potrzebna jest zmienna, która:',['przesuwa podaż i nie wpływa na popyt','przesuwa popyt i nie wpływa bezpośrednio na podaż','jest skorelowana z szokami podaży','jest równa cenie z poprzedniego okresu'],1,'Przesunięcia popytu przy stałej podaży wyznaczają punkty na krzywej podaży.'],
+ ['Dla funkcji produkcji q = A·L^α z jednym czynnikiem zmiennym cenowa elastyczność podaży wynosi:',['α','1 − α','α/(1 − α)','1/(1 − α)'],2,'Z warunku p·MPL = w wynika q* ∝ p^(α/(1−α)).']];
+var ql=$('#quizList'),qs=0,qn=0;
+function renderQuiz(){ql.innerHTML='';qs=0;qn=0;$('#qFinal').textContent='';updQ();
+ QZ.forEach(function(q,i){var d=el('div','q');d.appendChild(el('div','n','Pytanie '+(i+1)+' z '+QZ.length));d.appendChild(el('h4','',q[0]));
+  var o=el('div','opts'),ex=el('p','exp','');ex.hidden=true;
+  q[1].forEach(function(t,j){var b=el('button','',String.fromCharCode(65+j)+'. '+t);b.type='button';
+   b.addEventListener('click',function(){[].forEach.call(o.children,function(x,k){x.disabled=true;if(k===q[2])x.classList.add('ok')});
+    if(j===q[2])qs++;else b.classList.add('bad');qn++;ex.hidden=false;ex.textContent=(j===q[2]?'Dobrze. ':'Niestety nie. ')+q[3];updQ();});o.appendChild(b)});
+  d.appendChild(o);d.appendChild(ex);ql.appendChild(d)});}
+function updQ(){$('#qScore').textContent='Wynik: '+qs+' / '+QZ.length;
+ if(qn===QZ.length){var p=Math.round(qs/QZ.length*100);$('#qFinal').textContent=p+'% · '+(p>=90?'bardzo dobrze':(p>=50?'dobrze, wróć do pytań z błędami':'warto przeczytać wykład jeszcze raz'));}}
+$('#qReset').addEventListener('click',renderQuiz);renderQuiz();
+
+})();
+</script>
+<script>
+(function(){
+/* ===== LEKTOR z plików mp3 =====
+   Każda część = jedna sekcja strony (id sekcji) + plik mp3 w folderze audio/.
+   Zmień nazwy plików poniżej tak, jak nazywają się Twoje mp3. */
+var PARTS=[
+  {id:'s0', file:'audio/wprowadzenie.mp3', title:'Wstęp'},
+  {id:'s1', file:'audio/cz1.mp3', title:'1. Istota podaży'},
+  {id:'s2', file:'audio/cz2.mp3', title:'2. Koszt i podaż'},
+  {id:'s3', file:'audio/cz3.mp3', title:'3. Kształty i wyjątki'},
+  {id:'s4', file:'audio/cz4.mp3', title:'4. Determinanty'},
+  {id:'s5', file:'audio/cz5.mp3', title:'5. Laboratorium'},
+  {id:'s6', file:'audio/cz6.mp3', title:'6. Elastyczność'},
+  {id:'s7', file:'audio/cz7.mp3', title:'7. Dynamika'},
+  {id:'s8', file:'audio/cz8.mp3', title:'8. Pomiar'},
+  {id:'s9', file:'audio/podsumowanie.mp3', title:'Podsumowanie'}
+];
+var $=function(s){return document.querySelector(s)};
+var A=$('#lkAudio'),ix=0,cur=null;
+var IC={play:'<svg viewBox="0 0 16 16"><path d="M4 2l10 6-10 6z"/></svg>',pause:'<svg viewBox="0 0 16 16"><path d="M3 2h4v12H3zM9 2h4v12H9z"/></svg>',prev:'<svg viewBox="0 0 16 16"><path d="M2 2h2v12H2zM14 2v12L5 8z"/></svg>',next:'<svg viewBox="0 0 16 16"><path d="M12 2h2v12h-2zM2 2l9 6-9 6z"/></svg>',stop:'<svg viewBox="0 0 16 16"><path d="M3 3h10v10H3z"/></svg>',gear:'<svg viewBox="0 0 16 16"><path d="M7 1h2l.4 2 1.5.7 1.7-1.2 1.4 1.4-1.2 1.7.7 1.5 2 .4v2l-2 .4-.7 1.5 1.2 1.7-1.4 1.4-1.7-1.2-1.5.7L9 15H7l-.4-2-1.5-.7-1.7 1.2-1.4-1.4 1.2-1.7L2.5 9 1 9V7l2-.4.7-1.5-1.2-1.7 1.4-1.4 1.7 1.2 1.5-.7zM8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/></svg>'};
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+$('#lkPlay').innerHTML=IC.play;$('#lkPrev').innerHTML=IC.prev;$('#lkNext').innerHTML=IC.next;$('#lkStop').innerHTML=IC.stop;$('#lkSet').innerHTML=IC.gear;
+
+function sec(i){return document.getElementById(PARTS[i].id)}
+function mark(i){if(cur)cur.classList.remove('reading');cur=i==null?null:sec(i);if(!cur)return;cur.classList.add('reading');}
+function ui(){var pl=!A.paused&&!A.ended;
+  $('#lkPlay').innerHTML=pl?IC.pause:IC.play;$('#lkPlay').setAttribute('aria-label',pl?'Wstrzymaj':'Odtwarzaj');
+  $('#lkNow').textContent=pl?'Czyta: '+PARTS[ix].title:(A.src&&A.currentTime>0?'Wstrzymano: '+PARTS[ix].title:'Odsłuchaj wykład')}
+function load(i){ix=Math.max(0,Math.min(PARTS.length-1,i));A.src=PARTS[ix].file;A.playbackRate=+$('#lkRate').value}
+function playPart(i){load(i);mark(ix);A.play().catch(function(){$('#lkNow').textContent='Nie udało się odtworzyć: '+PARTS[ix].file});ui()}
+function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;mark(null);ui()}
+
+A.addEventListener('play',ui);A.addEventListener('pause',ui);
+A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
+A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1)playPart(ix+1);else{mark(null);ui()}});
+
+$('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
+$('#lkStop').addEventListener('click',stopAll);
+$('#lkPrev').addEventListener('click',function(){playPart(ix-1)});
+$('#lkNext').addEventListener('click',function(){playPart(ix+1)});
+$('#lkSet').addEventListener('click',function(){var p=$('#lkPop');p.hidden=!p.hidden;this.setAttribute('aria-expanded',String(!p.hidden))});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!A.paused)A.pause()});
+var rs=store('lk-rate');if(rs)$('#lkRate').value=rs;
+function rt(){$('#lkRatev').textContent=(+$('#lkRate').value).toFixed(2).replace('.',',')+'×';A.playbackRate=+$('#lkRate').value;store('lk-rate',$('#lkRate').value)}
+$('#lkRate').addEventListener('input',rt);rt();
+
+/* przyciski "Odsłuchaj tę część" przy nagłówkach */
+PARTS.forEach(function(p,i){var s=document.getElementById(p.id);if(!s)return;var h=s.querySelector('h2');if(!h)return;
+  var b=document.createElement('button');b.type='button';b.className='lk-sec';b.innerHTML=IC.play+'Odsłuchaj tę część';
+  b.addEventListener('click',function(){playPart(i)});h.insertAdjacentElement('afterend',b)});
+ui();
+})();
+</script>
+
+
+</body></html>
