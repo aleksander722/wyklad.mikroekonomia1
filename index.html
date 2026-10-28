@@ -1199,7 +1199,7 @@ function stopAll(){A.pause();A.removeAttribute('src');A.load();ix=0;pend=null;pi
 
 A.addEventListener('play',ui);A.addEventListener('pause',ui);
 A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
-A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1)playPart(ix+1);else{mark(null);ui()}});
+A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1){playPart(ix+1);var t=sec(ix);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}else{mark(null);ui()}});
 
 $('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
 $('#lkPrev').addEventListener('click',function(){skip(-15)});
@@ -1221,7 +1221,7 @@ var PB=$('#lkPick'),LST=$('#lkList');
 function pickSync(){if(!LST)return;$('#lkPickT').textContent=PARTS[ix].title;[].forEach.call(LST.children,function(b,i){b.setAttribute('aria-selected',String(i===ix))})}
 function closeList(){LST.hidden=true;PB.setAttribute('aria-expanded','false')}
 PARTS.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','option');b.textContent=p.title;
-  b.addEventListener('click',function(){closeList();playPart(i)});LST.appendChild(b)});
+  b.addEventListener('click',function(){closeList();playPart(i);var t=sec(i);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});LST.appendChild(b)});
 PB.addEventListener('click',function(e){e.stopPropagation();var open=LST.hidden;LST.hidden=!open;PB.setAttribute('aria-expanded',String(open));
   if(open){$('#lkPop').hidden=true;$('#lkSet').setAttribute('aria-expanded','false')}});
 $('#lkSet').addEventListener('click',closeList);
