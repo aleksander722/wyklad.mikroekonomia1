@@ -53,6 +53,10 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .bar{height:3px;background:var(--leaf);width:0}
 /* fragment czytany w danej chwili przez lektora */
 .cue{background:var(--leaf-wash);box-shadow:0 0 0 6px var(--leaf-wash);border-radius:4px;transition:background .25s,box-shadow .25s}
+/* przycisk powrotu do czytanego fragmentu (pokazuje się, gdy fragment jest poza ekranem) */
+#lkBack{position:fixed;right:16px;bottom:134px;z-index:39;border:1px solid var(--leaf);background:var(--surface);color:var(--accent-text);font-family:var(--display);font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,50,40,.2);cursor:pointer}
+#lkBack:hover{background:var(--leaf-wash)}
+@media (max-width:480px){#lkBack{right:8px;bottom:128px}}
 /* ramki, wzory i ćwiczenia mają własne tło, więc podświetlamy je obrysem */
 .box.cue{background:var(--leaf-wash);border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf)}
 .fx.cue{background:var(--leaf-soft);border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf)}
@@ -814,8 +818,10 @@ main{padding-bottom:150px}
   <div class="lk-pop" id="lkPop" hidden>
     <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="2" step="0.05" value="1"></label>
         <label class="chk"><input type="checkbox" id="lkAuto" checked> Czytaj kolejne części automatycznie</label>
+        <label class="chk"><input type="checkbox" id="lkFollow" checked> Przewijaj stronę razem z lektorem</label>
   </div>
 </div>
+<button type="button" id="lkBack" hidden></button>
 <style>
 /* odtwarzacz: zwarta karta przy prawej krawędzi, przewijanie, wybór części */
 .lk{left:auto;right:16px;bottom:16px;width:380px;max-width:calc(100vw - 24px);flex-wrap:wrap;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 32px rgba(0,50,40,.22)}
@@ -1205,7 +1211,7 @@ function stopAll(){clearTimeout(advT);A.pause();A.removeAttribute('src');A.load(
 
 A.addEventListener('play',function(){clearTimeout(advT);ui()});A.addEventListener('pause',ui);
 A.addEventListener('error',function(){if(A.getAttribute('src'))$('#lkNow').textContent='Brak pliku: '+PARTS[ix].file});
-A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1){advT=setTimeout(function(){playPart(ix+1);var t=sec(ix);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})},1000)}else{mark(null);ui()}});
+A.addEventListener('ended',function(){if($('#lkAuto').checked&&ix<PARTS.length-1){advT=setTimeout(function(){playPart(ix+1);var t=sec(ix);if(t&&$('#lkFollow').checked)t.scrollIntoView({behavior:'smooth',block:'start'})},1000)}else{mark(null);ui()}});
 
 $('#lkPlay').addEventListener('click',function(){if(!A.getAttribute('src'))playPart(ix);else if(A.paused)A.play();else A.pause()});
 $('#lkPrev').addEventListener('click',function(){skip(-15)});
@@ -1247,7 +1253,7 @@ var CUE_DATA={
   s0:[[0,'.part'],[1,'h2'],[3,'.col > p:nth-of-type(1)'],[37,'.col > p:nth-of-type(2)'],[63,'h3'],
       [65,'li:nth-child(1)'],[75,'li:nth-child(2)'],[85,'li:nth-child(3)'],[94,'li:nth-child(4)'],[99,'li:nth-child(5)'],[107,'li:nth-child(6)']],
   s1:[[0,'#s1 > div.col:nth-of-type(1) > .part'],[2,'#s1 > div.col:nth-of-type(1) > h2'],[4,'.def'],[18,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(2)'],
-      [62,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(1)'],[65,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(3)'],
+      [62,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(1)'],[66,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(3)'],
       [90,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(2)'],[93,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(4)'],[123,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(3)'],[126,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(5)'],
       [138,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(1)'],[164,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(2)'],[181,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(3)'],
       [198,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(4)'],
@@ -1260,20 +1266,39 @@ Object.keys(CUE_DATA).forEach(function(id){var sc=document.getElementById(id);if
   CUES[id]=CUE_DATA[id].map(function(c){return{t:c[0],el:sc.querySelector(c[1])}}).filter(function(c){return c.el})});
 var cueEl=null,userT=0;
 ['wheel','touchmove'].forEach(function(ev){window.addEventListener(ev,function(){userT=Date.now()},{passive:true})});
+function cueGo(el){var r=el.getBoundingClientRect(),vh=window.innerHeight;el.scrollIntoView({behavior:'smooth',block:r.height>vh-260?'start':'center'})}
 function cueScroll(el){
+  if(!$('#lkFollow').checked)return;          /* opcja wyłączona: tylko podświetlamy */
   if(Date.now()-userT<4000)return;            /* sam przewijasz: nie przeszkadzamy */
   var r=el.getBoundingClientRect(),vh=window.innerHeight;
   if(r.top>=90&&r.bottom<=vh-150)return;      /* już widać, nie przewijamy */
-  el.scrollIntoView({behavior:'smooth',block:r.height>vh-260?'start':'center'})}
+  cueGo(el)}
 function cueSet(el){if(el===cueEl)return;if(cueEl)cueEl.classList.remove('cue');cueEl=el;if(el){el.classList.add('cue');cueScroll(el)}}
 function cueUpdate(){
   var list=CUES[PARTS[ix].id];
-  if(!list||!A.getAttribute('src')){cueSet(null);return}
+  if(!list||!A.getAttribute('src')){cueSet(null);backQ();return}
   var t=A.currentTime,hit=null;
   for(var k=0;k<list.length;k++){if(list[k].t<=t)hit=list[k].el}
-  cueSet(hit)}
+  cueSet(hit);backQ()}
 ['timeupdate','seeked'].forEach(function(ev){A.addEventListener(ev,cueUpdate)});
-['emptied','ended'].forEach(function(ev){A.addEventListener(ev,function(){cueSet(null)})});
+['emptied','ended'].forEach(function(ev){A.addEventListener(ev,function(){cueSet(null);backQ()})});
+
+/* opcja "Przewijaj stronę razem z lektorem" (zapamiętywana w przeglądarce) */
+if(store('lk-follow')==='0')$('#lkFollow').checked=false;
+$('#lkFollow').addEventListener('change',function(){store('lk-follow',this.checked?'1':'0');if(this.checked&&cueEl)cueScroll(cueEl);backQ()});
+
+/* przycisk "Wróć do czytanego fragmentu": cel to podświetlony fragment, a gdy go nie ma (część bez czasów) cała czytana część */
+var BK=$('#lkBack'),bkQ=false;
+function readTarget(){return cueEl||(A.getAttribute('src')?sec(ix):null)}
+function backUpdate(){
+  var t=readTarget();if(!t){BK.hidden=true;return}
+  var r=t.getBoundingClientRect(),vh=window.innerHeight,above=r.bottom<60,below=r.top>vh-130;
+  BK.hidden=!(above||below);
+  if(!BK.hidden)BK.textContent=(above?'↑':'↓')+' Wróć do czytanego fragmentu'}
+function backQ(){if(bkQ)return;bkQ=true;requestAnimationFrame(function(){bkQ=false;backUpdate()})}
+window.addEventListener('scroll',backQ,{passive:true});window.addEventListener('resize',backQ);
+BK.addEventListener('click',function(){var t=readTarget();if(!t)return;userT=0;
+  if(t===cueEl)cueGo(t);else t.scrollIntoView({behavior:'smooth',block:'start'})});
 function fmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var m=Math.floor(t/60),s=t%60;return m+':'+(s<10?'0':'')+s}
 function seekUI(){var d=A.duration,ok=!!A.getAttribute('src')&&isFinite(d)&&d>0;SK.disabled=!ok;
   if(ok){SK.max=Math.floor(d);if(!drag)SK.value=A.currentTime;TD.textContent=fmt(d)}else{SK.max=100;SK.value=0;TD.textContent='0:00'}
