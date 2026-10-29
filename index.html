@@ -51,6 +51,8 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .nav button:hover{color:var(--ink)}
 .nav button.on{color:var(--accent-text);border-bottom-color:var(--leaf)}
 .bar{height:3px;background:var(--leaf);width:0}
+/* fragment czytany w danej chwili przez lektora */
+.cue{background:var(--leaf-wash);box-shadow:0 0 0 6px var(--leaf-wash);border-radius:4px;transition:background .25s,box-shadow .25s}
 /* komputer: pionowe menu przy lewej krawędzi, treść przesunięta w prawo */
 @media (min-width:900px){
   body{padding-left:190px}
@@ -806,7 +808,7 @@ main{padding-bottom:150px}
   </div>
   <div class="plist" id="lkList" role="listbox" aria-label="Części wykładu" hidden></div>
   <div class="lk-pop" id="lkPop" hidden>
-    <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="1.5" step="0.05" value="1"></label>
+    <label class="sl" for="lkRate">Tempo: <span id="lkRatev"></span><input id="lkRate" type="range" min="0.7" max="2" step="0.05" value="1"></label>
         <label class="chk"><input type="checkbox" id="lkAuto" checked> Czytaj kolejne części automatycznie</label>
   </div>
 </div>
@@ -1228,6 +1230,38 @@ $('#lkSet').addEventListener('click',closeList);
 document.addEventListener('click',function(e){if(!LST.hidden&&!LST.contains(e.target))closeList()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeList()});
 pickSync();
+
+/* okno ustawień: zamyka się po kliknięciu poza nim oraz klawiszem Esc */
+function closePop(){$('#lkPop').hidden=true;$('#lkSet').setAttribute('aria-expanded','false')}
+document.addEventListener('click',function(e){var p=$('#lkPop');if(!p.hidden&&!p.contains(e.target)&&!$('#lkSet').contains(e.target))closePop()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#lkPop').hidden)closePop()});
+
+/* ===== podświetlanie czytanego fragmentu =====
+   CUE_DATA: dla każdej części lista [sekunda w pliku mp3, selektor elementu w tej części].
+   Aby dodać kolejną część, dopisz jej id (np. s1) i listę czasów. */
+var CUE_DATA={
+  s0:[[0,'.part'],[1,'h2'],[3,'.col > p:nth-of-type(1)'],[37,'.col > p:nth-of-type(2)'],[63,'h3'],
+      [65,'li:nth-child(1)'],[75,'li:nth-child(2)'],[85,'li:nth-child(3)'],[94,'li:nth-child(4)'],[99,'li:nth-child(5)'],[106,'li:nth-child(6)']]
+};
+var CUES={};
+Object.keys(CUE_DATA).forEach(function(id){var sc=document.getElementById(id);if(!sc)return;
+  CUES[id]=CUE_DATA[id].map(function(c){return{t:c[0],el:sc.querySelector(c[1])}}).filter(function(c){return c.el})});
+var cueEl=null,userT=0;
+['wheel','touchmove'].forEach(function(ev){window.addEventListener(ev,function(){userT=Date.now()},{passive:true})});
+function cueScroll(el){
+  if(Date.now()-userT<4000)return;            /* sam przewijasz: nie przeszkadzamy */
+  var r=el.getBoundingClientRect(),vh=window.innerHeight;
+  if(r.top>=90&&r.bottom<=vh-150)return;      /* już widać, nie przewijamy */
+  el.scrollIntoView({behavior:'smooth',block:r.height>vh-260?'start':'center'})}
+function cueSet(el){if(el===cueEl)return;if(cueEl)cueEl.classList.remove('cue');cueEl=el;if(el){el.classList.add('cue');cueScroll(el)}}
+function cueUpdate(){
+  var list=CUES[PARTS[ix].id];
+  if(!list||!A.getAttribute('src')){cueSet(null);return}
+  var t=A.currentTime,hit=null;
+  for(var k=0;k<list.length;k++){if(list[k].t<=t)hit=list[k].el}
+  cueSet(hit)}
+['timeupdate','seeked'].forEach(function(ev){A.addEventListener(ev,cueUpdate)});
+['emptied','ended'].forEach(function(ev){A.addEventListener(ev,function(){cueSet(null)})});
 function fmt(t){if(!isFinite(t)||t<0)t=0;t=Math.floor(t);var m=Math.floor(t/60),s=t%60;return m+':'+(s<10?'0':'')+s}
 function seekUI(){var d=A.duration,ok=!!A.getAttribute('src')&&isFinite(d)&&d>0;SK.disabled=!ok;
   if(ok){SK.max=Math.floor(d);if(!drag)SK.value=A.currentTime;TD.textContent=fmt(d)}else{SK.max=100;SK.value=0;TD.textContent='0:00'}
