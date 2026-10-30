@@ -57,6 +57,8 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 #lkBack{position:fixed;right:16px;bottom:134px;z-index:39;border:1px solid var(--leaf);background:var(--surface);color:var(--accent-text);font-family:var(--display);font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,50,40,.2);cursor:pointer}
 #lkBack:hover{background:var(--leaf-wash)}
 @media (max-width:480px){#lkBack{right:8px;bottom:128px}}
+.fx small.cue{background:var(--leaf-soft);box-shadow:0 0 0 4px var(--leaf-soft)}
+.fresh .cue{background:var(--surface);box-shadow:0 0 0 6px var(--surface)}
 /* ramki, wzory i ćwiczenia mają własne tło, więc podświetlamy je obrysem */
 .box.cue{background:var(--leaf-wash);border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf)}
 .fx.cue{background:var(--leaf-soft);border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf)}
@@ -1259,7 +1261,14 @@ var CUE_DATA={
       [198,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(4)'],
       [201,'#s1 > div.grid > div.box:nth-of-type(1)'],[224,'#s1 > div.grid > div.box:nth-of-type(2)'],[244,'#s1 > div.grid > div.box:nth-of-type(3)'],
       [260,'#s1 > div.col:nth-of-type(3) > h3'],[262,'#s1 > div.col:nth-of-type(3) > p'],[295,'#s1 > div.col:nth-of-type(3) > .fx'],
-      [304,'#s1 > div.lab']]
+      [304,'#s1 > div.lab']],
+  s2:[[0,'#s2 > div.col:nth-of-type(1) > .part'],[1,'#s2 > div.col:nth-of-type(1) > h2'],[4,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(1)'],[24,'#s2 > div.col:nth-of-type(1) > .fx'],[39,'#s2 > div.col:nth-of-type(1) > .fx > small'],[53,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(2)'],
+      [120,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(1)'],[123,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(1)'],[156,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(2)'],[160,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(2)'],
+      [194,'#s2 > div.col:nth-of-type(3) > .fx'],[206,'#s2 > div.col:nth-of-type(3) > .fx > small'],[222,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(3)'],
+      [252,'#s2 > div.col:nth-of-type(5) > .fresh > h4'],[253,'#s2 > div.col:nth-of-type(5) > .fresh > p'],[290,'#s2 > div.col:nth-of-type(5) > p']],
+  s3:[[0,'#s3 > div.col:nth-of-type(1) > .part'],[2,'#s3 > div.col:nth-of-type(1) > h2'],[6,'#s3 > div.col:nth-of-type(1) > p'],[41,'#s3 > div.col:nth-of-type(3) > h3'],[44,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(1)'],
+      [64,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(1)'],[80,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(2)'],[99,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(3)'],
+      [121,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(2)'],[157,'#s3 > div.col:nth-of-type(3) > .fx'],[172,'#s3 > div.col:nth-of-type(3) > .fx > small']]
 };
 var CUES={};
 Object.keys(CUE_DATA).forEach(function(id){var sc=document.getElementById(id);if(!sc)return;
