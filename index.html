@@ -1252,23 +1252,36 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#lkPop'
    CUE_DATA: dla każdej części lista [sekunda w pliku mp3, selektor elementu w tej części].
    Aby dodać kolejną część, dopisz jej id (np. s1) i listę czasów. */
 var CUE_DATA={
-  s0:[[0,'.part'],[1,'h2'],[3,'.col > p:nth-of-type(1)'],[37,'.col > p:nth-of-type(2)'],[63,'h3'],
-      [65,'li:nth-child(1)'],[75,'li:nth-child(2)'],[85,'li:nth-child(3)'],[94,'li:nth-child(4)'],[99,'li:nth-child(5)'],[107,'li:nth-child(6)']],
-  s1:[[0,'#s1 > div.col:nth-of-type(1) > .part'],[2,'#s1 > div.col:nth-of-type(1) > h2'],[4,'.def'],[18,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(2)'],
-      [62,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(1)'],[66,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(3)'],
-      [90,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(2)'],[93,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(4)'],[123,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(3)'],[126,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(5)'],
-      [138,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(1)'],[164,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(2)'],[181,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(3)'],
-      [198,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(4)'],
-      [201,'#s1 > div.grid > div.box:nth-of-type(1)'],[224,'#s1 > div.grid > div.box:nth-of-type(2)'],[244,'#s1 > div.grid > div.box:nth-of-type(3)'],
-      [260,'#s1 > div.col:nth-of-type(3) > h3'],[262,'#s1 > div.col:nth-of-type(3) > p'],[295,'#s1 > div.col:nth-of-type(3) > .fx'],
-      [304,'#s1 > div.lab']],
-  s2:[[0,'#s2 > div.col:nth-of-type(1) > .part'],[1,'#s2 > div.col:nth-of-type(1) > h2'],[4,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(1)'],[24,'#s2 > div.col:nth-of-type(1) > .fx'],[39,'#s2 > div.col:nth-of-type(1) > .fx > small'],[53,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(2)'],[104,'#s2 > div.lab:nth-of-type(2)']
-      [120,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(1)'],[123,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(1)'],[156,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(2)'],[160,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(2)'],
-      [194,'#s2 > div.col:nth-of-type(3) > .fx'],[206,'#s2 > div.col:nth-of-type(3) > .fx > small'],[222,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(3)'],
+  s0:[[0,'.part'],[1,'h2'],
+      [3,'.col > p:nth-of-type(1)'],[37,'.col > p:nth-of-type(2)'],
+      [63,'h3'],[65,'li:nth-child(1)'],
+      [75,'li:nth-child(2)'],[85,'li:nth-child(3)'],
+      [94,'li:nth-child(4)'],[99,'li:nth-child(5)'],
+      [107,'li:nth-child(6)']],
+  s1:[[0,'#s1 > div.col:nth-of-type(1) > .part'],[2,'#s1 > div.col:nth-of-type(1) > h2'],
+      [4,'.def'],[18,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(2)'],[62,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(1)'],
+      [66,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(3)'],[90,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(2)'],
+      [93,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(4)'],[123,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(3)'],
+      [126,'#s1 > div.col:nth-of-type(1) > p:nth-of-type(5)'],[138,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(1)'],
+      [164,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(2)'],[181,'#s1 > div.col:nth-of-type(1) > ol > li:nth-child(3)'],
+      [198,'#s1 > div.col:nth-of-type(1) > h3:nth-of-type(4)'],[201,'#s1 > div.grid > div.box:nth-of-type(1)'],
+      [224,'#s1 > div.grid > div.box:nth-of-type(2)'],[244,'#s1 > div.grid > div.box:nth-of-type(3)'],
+      [260,'#s1 > div.col:nth-of-type(3) > h3'],[262,'#s1 > div.col:nth-of-type(3) > p'],
+      [295,'#s1 > div.col:nth-of-type(3) > .fx'],[304,'#s1 > div.lab']],
+  s2:[[0,'#s2 > div.col:nth-of-type(1) > .part'],[1,'#s2 > div.col:nth-of-type(1) > h2'],
+      [4,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(1)'],[24,'#s2 > div.col:nth-of-type(1) > .fx'],
+      [39,'#s2 > div.col:nth-of-type(1) > .fx > small'],[53,'#s2 > div.col:nth-of-type(1) > p:nth-of-type(2)'],
+      [104,'#s2 > div.lab:nth-of-type(2)'],[120,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(1)'],
+      [123,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(1)'],[156,'#s2 > div.col:nth-of-type(3) > h3:nth-of-type(2)'],
+      [160,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(2)'],[194,'#s2 > div.col:nth-of-type(3) > .fx'],
+      [206,'#s2 > div.col:nth-of-type(3) > .fx > small'],[222,'#s2 > div.col:nth-of-type(3) > p:nth-of-type(3)'],
       [252,'#s2 > div.col:nth-of-type(5) > .fresh'],[290,'#s2 > div.col:nth-of-type(5) > p']],
-  s3:[[0,'#s3 > div.col:nth-of-type(1) > .part'],[2,'#s3 > div.col:nth-of-type(1) > h2'],[6,'#s3 > div.col:nth-of-type(1) > p'],[30,'#s3 > div.lab'],[41,'#s3 > div.col:nth-of-type(3) > h3'],[44,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(1)'],
-      [64,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(1)'],[80,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(2)'],[99,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(3)'],
-      [121,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(2)'],[157,'#s3 > div.col:nth-of-type(3) > .fx'],[171,'#s3 > div.col:nth-of-type(3) > .fx > small']]
+  s3:[[0,'#s3 > div.col:nth-of-type(1) > .part'],[2,'#s3 > div.col:nth-of-type(1) > h2'],
+      [6,'#s3 > div.col:nth-of-type(1) > p'],[30,'#s3 > div.lab'],[41,'#s3 > div.col:nth-of-type(3) > h3'],
+      [44,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(1)'],[64,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(1)'],
+      [80,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(2)'],[99,'#s3 > div.col:nth-of-type(3) > ul > li:nth-child(3)'],
+      [121,'#s3 > div.col:nth-of-type(3) > p:nth-of-type(2)'],[157,'#s3 > div.col:nth-of-type(3) > .fx'],
+      [171,'#s3 > div.col:nth-of-type(3) > .fx > small']]
 };
 var CUES={};
 Object.keys(CUE_DATA).forEach(function(id){var sc=document.getElementById(id);if(!sc)return;
